@@ -1,13 +1,11 @@
 export interface PageProps {
-  id: string;
+  params: Promise<{ id: string }>;
 }
 
-export default function Page(props: PageProps) {
-    
-
-    return (
-      <>
-        <p>Admin Product Page</p>
-      </>
-    );
+export default function Page({ params }: PageProps) {
+  return (
+    <>
+      <p>Admin Product Page</p>
+    </>
+  );
 }
