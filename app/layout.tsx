@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jbluxenterprises.vercel.app"), // Update with your actual production domain when ready
+  metadataBase: new URL("https://jbluxenterprises.vercel.app"),
   title: {
     default:
-      "JB Lux Enterprises | Premium Clothing, Shoes, Wristwatches & Accessories in Wholesale & Retail",
+      "JB Lux Enterprises | Premium Clothing, Shoes & Accessories in Wholesale & Retail",
     template: "%s | JB Lux Enterprises",
   },
   description:
-    "Shop premium urban menswear, stylish clothing, luxury wristwatches, designer shoes, and complete apparel accessories at JB Lux Enterprises. Available in wholesale and retail. Located on Lagos Island, Nigeria.",
+    "Shop premium urban unisex wear, stylish clothing, luxury wristwatches, designer shoes, and complete apparel accessories at JB Lux Enterprises. Available in wholesale and retail. Located on Lagos Island, Nigeria.",
   keywords: [
     // Brand & Identity
     "JB Lux Enterprises",
@@ -50,26 +50,25 @@ export const metadata: Metadata = {
   creator: "JB Lux Enterprises",
   openGraph: {
     type: "website",
-    locale: "en_NG",
+    locale: "en_US",
     url: "https://jbluxenterprises.vercel.app",
     siteName: "JB Lux Enterprises",
-    title:
-      "JB Lux Enterprises | Premium Clothing, Shoes, Wristwatches & Accessories",
+    title: "JB Lux Enterprises | Premium Clothing, Shoes & Accessories",
     description:
-      "Your ultimate destination for stylish urban menswear, luxury wristwatches, shoes, and apparel in wholesale and retail. Located in Lagos Island, Nigeria.",
+      "Your ultimate destination for stylish urban unisex wear, luxury wristwatches, shoes, and apparel in wholesale and retail. Located in Lagos Island, Nigeria.",
     images: [
       {
         url: "https://jbluxenterprises.vercel.app/og/og.jpg",
         width: 1200,
         height: 630,
-        alt: "JB Lux Enterprises — Premium Wear & Accessories",
+        alt: "JB Lux Enterprises — Premium Clothing, Shoes & Accessories",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "JB Lux Enterprises | Premium Clothing, Shoes & Wristwatches",
+    title: "JB Lux Enterprises | Premium Clothing,  & Accessories",
     description:
       "Shop stylish urban apparel, wristwatches, and footwear in wholesale and retail. Visit us on Lagos Island or order online.",
     images: ["https://jbluxenterprises.vercel.app/og/og.jpg"],
