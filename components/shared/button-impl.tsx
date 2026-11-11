@@ -1,0 +1,275 @@
+"use client"
+
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import {
+    type ButtonHTMLAttributes,
+    type ElementType,
+    type ReactNode,
+} from "react";
+import { Button, buttonVariants } from "../ui/button";
+import { Download, ExternalLink, Loader } from "lucide-react";
+import { scrollToId, ScrollToIdType } from "./navigation";
+
+export const buttonImplVariants = cva("flex gap-2", {
+    variants: {
+        height: {
+            sm: "h-8",
+            md: "h-10",
+            lg: "h-12",
+            xl: "h-14",
+        },
+        width: {
+            sm: "px-6!",
+            md: "px-8!",
+            lg: "px-10!",
+            xl: "px-14!",
+        },
+    },
+});
+
+type PageType = { type: "page"; href: string };
+type ScrollType = {
+    type: "scroll";
+    id: string;
+    href?: ScrollToIdType["destinationPath"]
+};
+type DownloadType = { type: "download"; href: string; filename: string };
+type ExternalType = { type: "external"; href: string };
+
+type RenderType = PageType | ScrollType | DownloadType | ExternalType;
+
+export type ButtonVariantProps = VariantProps<typeof buttonVariants> &
+    VariantProps<typeof buttonImplVariants>;
+
+type NativeButtonProps = Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    "type" | "onClick" | "className"
+>;
+
+export interface ButtonImplProps extends ButtonVariantProps, NativeButtonProps {
+    render?: RenderType;
+    text?: ReactNode;
+    icon?: ReactNode;
+    showIcon?: boolean;
+    side?: "left" | "right";
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    className?: string;
+    isPending?: boolean;
+    pending?: ReactNode;
+    isDisabled?: boolean;
+    showTextAt?: "all" | "sm" | "md" | "lg";
+    type?: "submit" | "button" | "reset" | undefined;
+}
+
+const SHOW_TEXT_AT_STYLES = cn(
+    "hidden",
+    "data-[sh=all]:inline",
+    "sm:data-[sh=sm]:inline",
+    "md:data-[sh=md]:inline",
+    "lg:data-[sh=lg]:inline",
+);
+
+export function ButtonImpl({
+    render,
+    text,
+    icon,
+    showIcon = true,
+    side = "left",
+    onClick,
+    className,
+    isPending,
+    pending = text,
+    isDisabled,
+    showTextAt = "all",
+    variant,
+    size,
+    height,
+    width,
+    type = "button",
+    ...rest
+}: ButtonImplProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const isDisabledOrPending = Boolean(isDisabled) || Boolean(isPending);
+
+    let Tag: ElementType = Button;
+    let tagProps: Record<string, unknown> = { type, onClick };
+
+    const scroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (render && render.type === "scroll") {
+            scrollToId({ id: render.id, currentPath: pathname, destinationPath: (render.href ?? pathname), e, router });
+        }
+    };
+
+    if (render) {
+        if (render.type === "page") {
+            Tag = Link;
+            tagProps = { href: render.href, type: undefined, onClick };
+        } else if (render.type === "scroll") {
+            Tag = "a";
+            tagProps = { type: undefined, onClick: scroll };
+        } else if (render.type === "download") {
+            Tag = "a";
+            tagProps = {
+                href: render.href,
+                download: render.filename,
+                type: undefined,
+                onClick,
+            };
+        } else if (render.type === "external") {
+            Tag = Link;
+            tagProps = {
+                href: render.href,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                type: undefined,
+                onClick,
+            };
+        }
+    }
+
+    if (isDisabledOrPending) {
+        Tag = 'button';
+    }
+
+    const BtnIcon = () => <>{(icon || isPending) &&
+        <span className="*:size-4">
+            {isPending ? <Loader className="animate-spin" /> : icon}
+        </span>
+    }</>
+
+    return (
+        <Tag
+            {...tagProps}
+            {...rest}
+            disabled={isDisabledOrPending || undefined}
+            className={cn("cursor-pointer capitalize",
+                buttonVariants({ variant, size }),
+                buttonImplVariants({ height, width }),
+                className,
+            )}
+        >
+            {showIcon && side === "left" && <BtnIcon />}
+
+            {text &&
+                <span data-sh={showTextAt} className={SHOW_TEXT_AT_STYLES}>
+                    {isPending ? pending : text}
+                </span>
+            }
+
+            {showIcon && side === "right" && <BtnIcon />}
+        </Tag>
+    );
+} import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+
+export interface ButtonImplGroupProps {
+    className?: string;
+    buttons?: Omit<ButtonImplProps, "isPending">[];
+    isPending?: boolean;
+}
+
+export default function ButtonImplGroup({ className, buttons, isPending }: ButtonImplGroupProps) {
+    const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+
+    if (!buttons || buttons.length === 0) return null;
+
+    return (
+        <div className={cn("flex items-center gap-2", className)}>
+            {buttons.map(({ text, onClick, ...btnProps }, index) => (
+                <ButtonImpl
+                    key={index}
+                    text={text}
+                    onClick={(e) => {
+                        setClickedIndex(index);
+                        onClick?.(e);
+                    }}
+                    isPending={clickedIndex === index && isPending}
+                    isDisabled={isPending}
+                    type={btnProps.type ?? "button"}
+                    {...btnProps}
+                />
+            ))}
+        </div>
+    );
+}
+
+export function PageBtn(props: ButtonImplProps & { href: string }) {
+    return <ButtonImpl {...props} render={{ type: "page", href: props.href }} />;
+}
+
+export function ScrollBtn({ id, href, ...props }: ButtonImplProps & { id: string, href?: string }) {
+    return <ButtonImpl {...props} render={{ type: "scroll", id, href: href }} />;
+}
+
+export function DownloadBtn({ href, filename, ...props }:
+    ButtonImplProps & { href: string; filename: string }) {
+    return (
+        <ButtonImpl
+            {...props}
+            icon={<Download />}
+            render={{ type: "download", href, filename }}
+        />
+    );
+}
+
+export function DownloadExternalBtn({ href, filename, ...props }:
+    ButtonImplProps & { href: string; filename: string }) {
+
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownload = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (!href) return;
+
+        try {
+            setIsDownloading(true);
+            // Fetch the file from the cross-origin Convex URL
+            const response = await fetch(href);
+            const blob = await response.blob();
+
+            // Create a local blob URL
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            // Create a temporary hidden anchor to trigger the download
+            const a = document.createElement("a");
+            a.href = blobUrl;
+            a.download = filename || "download";
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up
+            a.remove();
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error("Download failed", error);
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    return (
+        <ButtonImpl
+            {...props}
+            icon={<Download />}
+            isPending={isDownloading}
+            onClick={handleDownload}
+            render={{ type: "button" } as any}
+        />
+    );
+}
+
+export function ExternalBtn({ href, showTextAt = "sm", ...props }:
+    ButtonImplProps & { href: string }) {
+    return (
+        <ButtonImpl
+            {...props}
+            showTextAt={showTextAt}
+            icon={<ExternalLink />}
+            render={{ type: "external", href }}
+        />
+    );
+}

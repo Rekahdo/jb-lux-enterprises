@@ -1,5 +1,5 @@
 Next.js Initialization
-cmd: pnpm create next-app@latest rekahdo
+cmd: pnpm create next-app@latest jb-lux
 
 Turbor Pack Configuration  `next.config.ts`
 config: turbopackFileSystemCacheForDev: true
@@ -11,7 +11,6 @@ dashboard: https://dashboard.convex.dev/
 
 Convex with Better Auth
 doc: https://labs.convex.dev/better-auth/framework-guides/next
-cmd: pnpm install @convex-dev/better-auth-
 
 Generate a secret for encryption and generating hashes
 cmd: pnpm convex env set BETTER_AUTH_SECRET=$(node -e "console.log(crypto.randomBytes(32).toString('base64'))")

@@ -33,3 +33,8 @@ max-2xl: screen < 1536px  (Applies ONLY below 1536px, i.e., @media (max-width: 1
 =============================================================================
 NOTE: `max-*` modifiers (like `max-md:hidden`) are built-in Tailwind v3.2+ 
 utilities used to target screens strictly smaller than the given breakpoint.
+
+
+
+Remove
+Remove-Item -Recurse -Force .next

@@ -1,11 +1,10 @@
-import Image from "next/image";
+import { HeroSection } from "@/components/section/hero-section";
 
 export default function Home() {
   return (
     <main>
-      <h1>
-        JB LUX ENTERPRICES
-      </h1>
+      <HeroSection />
+
     </main>
   );
 }

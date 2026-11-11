@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-:root {
-  --background: oklch(0.985 0.008 85); /* #FAF9F5 Soft Warm Ivory Canvas */
-  --foreground: #11161f;
+@custom-variant dark (&:where(.dark, .dark *));:root {
+  --background: oklch(0.985 0.008 85);
+  --foreground: oklch(0.18 0.015 85);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.015 85);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.015 85);
-  --primary: #d4af37; /* JB Lux Imperial Gold — oklch(0.76 0.15 82) */
+  --primary: #d4af37;
   --primary-foreground: oklch(0.12 0.01 85);
   --secondary: oklch(0.95 0.015 85);
   --secondary-foreground: oklch(0.25 0.04 85);
@@ -23,11 +23,11 @@
   --border: oklch(0.89 0.015 85);
   --input: oklch(0.89 0.015 85);
   --ring: oklch(0.76 0.15 82);
-  --chart-1: oklch(0.76 0.15 82); /* Gold */
-  --chart-2: oklch(0.68 0.14 65); /* Warm Bronze */
-  --chart-3: oklch(0.82 0.1 95); /* Champagne */
-  --chart-4: oklch(0.5 0.1 75); /* Antique Gold */
-  --chart-5: oklch(0.62 0.15 45); /* Terracotta Ochre */
+  --chart-1: oklch(0.76 0.15 82);
+  --chart-2: oklch(0.68 0.14 65);
+  --chart-3: oklch(0.82 0.1 95);
+  --chart-4: oklch(0.5 0.1 75);
+  --chart-5: oklch(0.62 0.15 45);
   --sidebar: oklch(0.98 0.008 85);
   --sidebar-foreground: oklch(0.18 0.015 85);
   --sidebar-primary: oklch(0.76 0.15 82);
@@ -48,53 +48,48 @@
   --shadow-color: oklch(0 0 0);
   --shadow-2xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.07);
   --shadow-xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.07);
-  --shadow-sm:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
-  --shadow:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
-  --shadow-md:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
-  --shadow-lg:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
-  --shadow-xl:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
+  --shadow-sm: 0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow: 0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md: 0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-lg: 0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
+  --shadow-xl: 0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
   --shadow-2xl: 0px 2px 6px 0px hsl(0 0% 0% / 0.38);
   --tracking-normal: 0px;
   --spacing: 0.25rem;
 }
 
 .dark {
-  --background: oklch(0.12 0.008 85); /* #0E0E10 Deep Obsidian Charcoal */
-  --foreground: oklch(0.96 0.01 85); /* #F5F3EC Warm Ivory White */
-  --card: oklch(0.16 0.01 85); /* #151518 */
-  --card-foreground: oklch(0.96 0.01 85);
-  --popover: oklch(0.16 0.01 85);
-  --popover-foreground: oklch(0.96 0.01 85);
-  --primary: #d4af37; /* JB Lux Imperial Gold — oklch(0.76 0.15 82) */
+  --background: oklch(0.18 0.015 85);
+  --foreground: oklch(0.985 0.008 85);
+  --card: oklch(0.22 0.015 85);
+  --card-foreground: oklch(0.985 0.008 85);
+  --popover: oklch(0.22 0.015 85);
+  --popover-foreground: oklch(0.985 0.008 85);
+  --primary: #d4af37;
   --primary-foreground: oklch(0.12 0.01 85);
-  --secondary: oklch(0.2 0.012 85);
-  --secondary-foreground: oklch(0.92 0.01 85);
-  --muted: oklch(0.22 0.01 85);
-  --muted-foreground: oklch(0.68 0.015 85);
+  --secondary: oklch(0.25 0.02 85);
+  --secondary-foreground: oklch(0.95 0.015 85);
+  --muted: oklch(0.25 0.02 85);
+  --muted-foreground: oklch(0.7 0.02 85);
   --accent: #d4af37;
   --accent-foreground: oklch(0.12 0.01 85);
-  --destructive: oklch(62.948% 0.2558 26.298);
-  --destructive-foreground: oklch(0.96 0.01 85);
-  --border: oklch(0.24 0.01 85);
-  --input: oklch(0.24 0.01 85);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.985 0.008 85);
+  --border: oklch(0.32 0.02 85);
+  --input: oklch(0.32 0.02 85);
   --ring: oklch(0.76 0.15 82);
-  --chart-1: oklch(0.76 0.15 82); /* Gold */
-  --chart-2: oklch(0.7 0.12 65); /* Amber / Bronze */
-  --chart-3: oklch(0.85 0.1 95); /* Bright Champagne */
-  --chart-4: oklch(0.6 0.1 75); /* Rich Metallic Brass */
-  --chart-5: oklch(0.68 0.14 45); /* Warm Ochre */
-  --sidebar: oklch(0.1 0.008 85);
-  --sidebar-foreground: oklch(0.96 0.01 85);
+  --chart-1: oklch(0.76 0.15 82);
+  --chart-2: oklch(0.68 0.14 65);
+  --chart-3: oklch(0.82 0.1 95);
+  --chart-4: oklch(0.5 0.1 75);
+  --chart-5: oklch(0.62 0.15 45);
+  --sidebar: oklch(0.16 0.015 85);
+  --sidebar-foreground: oklch(0.985 0.008 85);
   --sidebar-primary: oklch(0.76 0.15 82);
   --sidebar-primary-foreground: oklch(0.12 0.01 85);
-  --sidebar-accent: oklch(0.2 0.012 85);
-  --sidebar-accent-foreground: oklch(0.96 0.01 85);
-  --sidebar-border: oklch(0.24 0.01 85);
+  --sidebar-accent: oklch(0.25 0.02 85);
+  --sidebar-accent-foreground: oklch(0.985 0.008 85);
+  --sidebar-border: oklch(0.32 0.02 85);
   --sidebar-ring: oklch(0.76 0.15 82);
   --font-sans: "Plus Jakarta Sans", sans-serif;
   --font-serif: "Bodoni Moda", "Playfair Display", serif;
@@ -106,19 +101,14 @@
   --shadow-spread: 0px;
   --shadow-opacity: 0.15;
   --shadow-color: oklch(0 0 0);
-  --shadow-2xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.07);
-  --shadow-xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.07);
-  --shadow-sm:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
-  --shadow:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
-  --shadow-md:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
-  --shadow-lg:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
-  --shadow-xl:
-    0px 2px 6px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
-  --shadow-2xl: 0px 2px 6px 0px hsl(0 0% 0% / 0.38);
+  --shadow-2xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.3);
+  --shadow-xs: 0px 2px 6px 0px hsl(0 0% 0% / 0.3);
+  --shadow-sm: 0px 2px 6px 0px hsl(0 0% 0% / 0.5), 0px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow: 0px 2px 6px 0px hsl(0 0% 0% / 0.5), 0px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow-md: 0px 2px 6px 0px hsl(0 0% 0% / 0.5), 0px 2px 4px -1px hsl(0 0% 0% / 0.5);
+  --shadow-lg: 0px 2px 6px 0px hsl(0 0% 0% / 0.5), 0px 4px 6px -1px hsl(0 0% 0% / 0.5);
+  --shadow-xl: 0px 2px 6px 0px hsl(0 0% 0% / 0.5), 0px 8px 10px -1px hsl(0 0% 0% / 0.5);
+  --shadow-2xl: 0px 2px 6px 0px hsl(0 0% 0% / 0.6);
 }
 
 @theme inline {
@@ -180,17 +170,43 @@
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 
-  --breakpoint-2xs: 350px;
-  --breakpoint-1xs: 400px;
+  /* MINE */
+  --spacing-app-3xs: 8px;
+  --spacing-app-2xs: 16px;
+  --spacing-app-xs: 24px;
+  --spacing-app-sm: 32px;
+  --spacing-app-md: 48px;
+  --spacing-app-lg: 64px;
+  --spacing-app-xl: 80px;
+  --spacing-app-2xl: 96px;
+
+  --text-5xs: 4px;
+  --text-5xs--line-height: 1;
+  
+  --text-4xs: 6px;
+  --text-4xs--line-height: 1;
+  
+  --text-3xs: 8px;
+  --text-3xs--line-height: 1.2;
+  
+  --text-2xs: 10px;
+  --text-2xs--line-height: 1.2;
+
+  --breakpoint-3xs: 350px;
+  --breakpoint-2xs: 400px;
   --breakpoint-xs: 550px;
   --breakpoint-mlg: 900px;
 
-  --text-1xs: 0.6rem;
+  --font-heading: var(--font-sans);
+
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 select-none;
   }
 
   body {
@@ -199,7 +215,159 @@
   }
 
   html {
-    @apply font-sans overflow-x-hidden;
+    @apply overflow-x-hidden font-sans;
     scrollbar-gutter: stable;
   }
+}
+
+@layer utilities {
+  .animate-into-view {
+    @apply animate-in fade-in-50 zoom-in-90 duration-200;
+  }
+
+    /* BASE */
+  .gap-section {
+    @apply gap-app-sm! sm:gap-app-lg! md:gap-app-xl! lg:gap-app-2xl!;
+  }
+  .p-section {
+    @apply p-app-sm! sm:p-app-lg! md:p-app-xl! lg:p-app-2xl!;
+  }
+  .px-section {
+    @apply px-app-xs! sm:px-app-sm! md:px-app-lg! lg:px-app-xl!;
+  }
+  .py-section {
+    @apply py-app-sm! sm:py-app-lg! md:py-app-xl! lg:py-app-2xl!;
+  }
+  .pt-section {
+    @apply pt-app-sm! sm:pt-app-lg! md:pt-app-xl! lg:pt-app-2xl!;
+  }
+  .pb-section {
+    @apply pb-app-sm! sm:pb-app-lg! md:pb-app-xl! lg:pb-app-2xl!;
+  }
+  .ps-section {
+    @apply ps-app-xs! sm:ps-app-sm! md:ps-app-lg! lg:ps-app-xl!;
+  }
+  .pe-section {
+    @apply pe-app-xs! sm:pe-app-sm! md:pe-app-lg! lg:pe-app-xl!;
+  }
+  .m-section {
+    @apply m-app-sm! sm:m-app-lg! md:m-app-xl! lg:m-app-2xl!;
+  }
+  .mx-section {
+    @apply mx-app-xs! sm:mx-app-sm! md:mx-app-lg! lg:mx-app-xl!;
+  }
+  .my-section {
+    @apply my-app-sm! sm:my-app-lg! md:my-app-xl! lg:my-app-2xl!;
+  }
+  .mt-section {
+    @apply mt-app-sm! sm:mt-app-lg! md:mt-app-xl! lg:mt-app-2xl!;
+  }
+  .mb-section {
+    @apply mb-app-sm! sm:mb-app-lg! md:mb-app-xl! lg:mb-app-2xl!;
+  }
+  .ms-section {
+    @apply ms-app-xs! sm:ms-app-sm! md:ms-app-lg! lg:ms-app-xl!;
+  }
+  .me-section {
+    @apply me-app-xs! sm:me-app-sm! md:me-app-lg! lg:me-app-xl!;
+  }
+
+  /* CARD */
+  .gap-card {
+    @apply gap-app-xs! sm:gap-app-xs! md:gap-app-sm! lg:gap-app-md!;
+  }
+  .p-card {
+    @apply p-app-xs! sm:p-app-xs! md:p-app-sm! lg:p-app-md!;
+  }
+  .px-card {
+    @apply px-app-xs! sm:px-app-xs! md:px-app-sm! lg:px-app-md!;
+  }
+  .py-card {
+    @apply py-app-xs! sm:py-app-xs! md:py-app-sm! lg:py-app-md!;
+  }
+  .pt-card {
+    @apply pt-app-xs! sm:pt-app-xs! md:pt-app-sm! lg:pt-app-md!;
+  }
+  .pb-card {
+    @apply pb-app-xs! sm:pb-app-xs! md:pb-app-sm! lg:pb-app-md!;
+  }
+  .ps-card {
+    @apply ps-app-xs! sm:ps-app-xs! md:ps-app-sm! lg:ps-app-md!;
+  }
+  .pe-card {
+    @apply pe-app-xs! sm:pe-app-xs! md:pe-app-sm! lg:pe-app-md!;
+  }
+  .m-card {
+    @apply m-app-xs! sm:m-app-xs! md:m-app-sm! lg:m-app-md!;
+  }
+  .mx-card {
+    @apply mx-app-xs! sm:mx-app-xs! md:mx-app-sm! lg:mx-app-md!;
+  }
+  .my-card {
+    @apply my-app-xs! sm:my-app-xs! md:my-app-sm! lg:my-app-md!;
+  }
+  .mt-card {
+    @apply mt-app-xs! sm:mt-app-xs! md:mt-app-sm! lg:mt-app-md!;
+  }
+  .mb-card {
+    @apply mb-app-xs! sm:mb-app-xs! md:mb-app-sm! lg:mb-app-md!;
+  }
+  .ms-card {
+    @apply ms-app-xs! sm:ms-app-xs! md:ms-app-sm! lg:ms-app-md!;
+  }
+  .me-card {
+    @apply me-app-xs! sm:me-app-xs! md:me-app-sm! lg:me-app-md!;
+  }
+
+  /* ELEMENT */
+  .gap-element {
+    @apply gap-app-2xs! sm:gap-app-xs! md:gap-app-sm! lg:gap-app-md!;
+  }
+  .p-element {
+    @apply p-app-2xs! sm:p-app-xs! md:p-app-sm! lg:p-app-md!;
+  }
+  .px-element {
+    @apply px-app-2xs! sm:px-app-xs! md:px-app-sm! lg:px-app-md!;
+  }
+  .py-element {
+    @apply py-app-2xs! sm:py-app-xs! md:py-app-sm! lg:py-app-md!;
+  }
+  .pt-element {
+    @apply pt-app-2xs! sm:pt-app-xs! md:pt-app-sm! lg:pt-app-md!;
+  }
+  .pb-element {
+    @apply pb-app-2xs! sm:pb-app-xs! md:pb-app-sm! lg:pb-app-md!;
+  }
+  .ps-element {
+    @apply ps-app-2xs! sm:ps-app-xs! md:ps-app-sm! lg:ps-app-md!;
+  }
+  .pe-element {
+    @apply pe-app-2xs! sm:pe-app-xs! md:pe-app-sm! lg:pe-app-md!;
+  }
+  .m-element {
+    @apply m-app-2xs! sm:m-app-xs! md:m-app-sm! lg:m-app-md!;
+  }
+  .mx-element {
+    @apply mx-app-2xs! sm:mx-app-xs! md:mx-app-sm! lg:mx-app-md!;
+  }
+  .my-element {
+    @apply my-app-2xs! sm:my-app-xs! md:my-app-sm! lg:my-app-md!;
+  }
+  .mt-element {
+    @apply mt-app-2xs! sm:mt-app-xs! md:mt-app-sm! lg:mt-app-md!;
+  }
+  .mb-element {
+    @apply mb-app-2xs! sm:mb-app-xs! md:mb-app-sm! lg:mb-app-md!;
+  }
+  .ms-element {
+    @apply ms-app-2xs! sm:ms-app-xs! md:ms-app-sm! lg:ms-app-md!;
+  }
+  .me-element {
+    @apply me-app-2xs! sm:me-app-xs! md:me-app-sm! lg:me-app-md!;
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
