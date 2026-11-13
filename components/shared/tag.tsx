@@ -14,7 +14,7 @@ const tagVariant = cva("",
     variants: {
       variant: {
         outline:
-          "border-2 border-border bg-foreground dark:bg-background text-primary",
+          "border-2 border-background/20 dark:border-foreground/20 bg-foreground dark:bg-background text-primary",
         filled:
           "border-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/90",
         filledMuted: cn(
@@ -97,7 +97,7 @@ export function Tag({
   className
 }: TagCompType & TagType & Omit<VariantProps<typeof tagVariant>, "padding" | "gap">) {
   return (
-    <div className={cn("flex flex-col items-center font-medium",
+    <div data-slot="tag" className={cn("flex flex-col items-center font-medium",
       "transition-colors text-foreground select-none",
       tagVariant({ variant, size, shape, padding: size }),
       className)}>

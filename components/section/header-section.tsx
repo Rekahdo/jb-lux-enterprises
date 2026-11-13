@@ -34,6 +34,7 @@ export async function HeaderSection() {
             id={HEADER_ID}
             as={"header"}
             py={'xs'}
+            width={'lg'}
             height={'header'}
             sticky={'top'}
             containerClassName="px-base"

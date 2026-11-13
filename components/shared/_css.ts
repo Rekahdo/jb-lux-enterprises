@@ -3,7 +3,7 @@ import { cn } from "cn";
 export const backDropBlur = {
   background: cn(
     "bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60 transition-all",
-    "shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)]",
+    // "shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)]",
   ),
 };
 

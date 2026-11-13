@@ -110,21 +110,20 @@ export const visitStoreTable = {
 
 export const visitStoreValidator = v.object(visitStoreTable);
 
-export const wholesaleTierValidator = v.object({
-  minQuantity: v.number(),
-  discountPercentage: v.number(),
-});
-
 export const productsTable = {
   name: v.string(),
   slug: v.string(),
-  badge: v.optional(v.string()),
+  badge: v.string(),
+  tagline: v.string(),
   category: v.string(),
-  type: v.string(),
+  subCategory: v.optional(v.string()),
   gender: v.union(v.literal("male"), v.literal("female"), v.literal("unisex")),
   description: v.string(),
+  fullDescription: v.string(),
   unitPrice: v.number(),
+  isSale: v.optional(v.boolean()),
   stock: v.number(),
+  isActive: v.boolean(),
   sizes: v.array(v.string()),
   colors: v.array(
     v.object({
@@ -133,16 +132,42 @@ export const productsTable = {
       image: imageValidator,
     }),
   ),
-  wholesaleTiers: v.optional(v.array(wholesaleTierValidator)),
+  wholesaleTiers: v.optional(
+    v.array(
+      v.object({
+        minQuantity: v.number(),
+        discountPercentage: v.number(),
+      }),
+    ),
+  ),
   details: v.object({
     fabric: v.string(),
     provenance: v.string(),
-    fullDescription: v.string(),
   }),
-  isBespokeAvailable: v.boolean(),
+  isFeatured: v.boolean(),
+  isCategory: v.boolean(),
+  isPopular: v.boolean(),
+  rating: v.number(),
 };
 
 export const productsValidator = v.object(productsTable);
+
+export const reviewTable = {
+  userId: v.string(),
+  productId: v.string(),
+  verifiedPurchase: v.boolean(),
+  rating: v.number(),
+  title: v.string(),
+  comment: v.string(),
+  fit: v.union(
+    v.literal("runs small"),
+    v.literal("true to size"),
+    v.literal("runs large"),
+  ),
+  helpfulCount: v.number(),
+};
+
+export const reviewsValidator = v.object(reviewTable);
 
 export const ordersTable = {
   userId: v.string(),
@@ -183,7 +208,7 @@ const dayValidator = v.union(
   v.literal("fri"),
   v.literal("sat"),
   v.literal("sun"),
-)
+);
 
 export const storeSettingsTable = {
   brandName: v.string(),
@@ -195,7 +220,9 @@ export const storeSettingsTable = {
   phoneNumber: phoneValidator,
   address: addressValidator,
   retail: v.boolean(),
+  retailDiscount: v.number(),
   wholesale: v.boolean(),
+  wholesaleDiscount: v.number(),
   facebook: v.optional(v.string()),
   whatsapp: v.optional(v.string()),
   instagram: v.optional(v.string()),
@@ -209,8 +236,8 @@ export const storeSettingsTable = {
   ),
   days: v.array(
     v.object({
-      from: dayValidator, 
-      to: dayValidator, 
+      from: dayValidator,
+      to: dayValidator,
       openHour: v.string(),
       closeHour: v.string(),
     }),
@@ -246,6 +273,8 @@ export default defineSchema({
   products: defineTable(productsTable)
     .index("by_slug", ["slug"])
     .index("by_category", ["category"]),
+
+  reviews: defineTable(reviewTable),
 
   orders: defineTable(ordersTable)
     .index("by_userId", ["userId"])
