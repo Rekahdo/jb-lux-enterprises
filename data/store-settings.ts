@@ -12,7 +12,9 @@ export const storeSettingsData: Promise<Infer<typeof storeSettingsValidator>> =
     accountNumber: "9059405621",
     email: "realjblux@gmail.com",
     retail: true,
+    retailDiscount: 0,
     wholesale: true,
+    wholesaleDiscount: 0,
     phoneNumber: {
       code: "+234",
       number: "9059405621",

@@ -18,6 +18,7 @@ const fadeOverlayVariants = cva("pointer-events-none absolute", {
 type FadeOverlayProps = VariantProps<typeof fadeOverlayVariants> & {
     height?: string;
     from?: string;
+    via?: string;
     to?: string;
     className?: string;
 };
@@ -25,6 +26,7 @@ type FadeOverlayProps = VariantProps<typeof fadeOverlayVariants> & {
 export function FadeOverlay({
     height = "h-20",
     from = "from-background",
+    via,
     to = "to-transparent",
     direction = "to-top",
     className,
@@ -32,10 +34,11 @@ export function FadeOverlay({
     return (
         <div
             aria-hidden="true"
-            className={cn(
+            className={cn("z-1",
                 fadeOverlayVariants({ direction }),
                 height,
                 from,
+                via,
                 to,
                 className
             )}

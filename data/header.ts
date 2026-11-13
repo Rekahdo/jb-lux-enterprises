@@ -3,7 +3,7 @@ import { Infer } from "convex/values";
 
 export type SrcImage = {
   src: string;
-  alt?: string;
+  alt: string;
 };
 
 type ValidatorType = Infer<typeof headerValidator>;

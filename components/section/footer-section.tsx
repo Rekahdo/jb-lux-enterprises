@@ -8,7 +8,7 @@ import { H2 } from "../shared/headings";
 import { cn } from "@/lib/utils";
 import { Mail, Phone, ShieldCheck } from "lucide-react";
 import { WhatsappIcon } from "../icon/cib-whatsapp";
-import { AUTH_ROUTE } from "@/lib/routes";
+import { AUTH_ROUTE, POLICY_ROUTE, TERMS_ROUTE } from "@/lib/routes";
 import { Unauthenticated } from "convex/react";
 import AuthRoute from "../shared/auth-route";
 import { storeSettingsData } from "@/data/store-settings";
@@ -46,9 +46,14 @@ export default async function FooterSection(props: FooterSectionProps) {
     const textsizeXS = "xs";
     const textsizeSM = "sm";
 
-    const TitleContent = ({ title, content, children, className }:
-        { title: string, content: ReactNode, children?: ReactNode, className?: string }) => (
-        <div className={cn("flex sm:justify-end grow md:min-w-60", className)}>
+    let index = 0;
+
+    const TitleContent = ({ title, content, children, className, index }:
+        { title: string, content: ReactNode, children?: ReactNode, className?: string, index: number }) => (
+        <div className={cn(
+            "flex sm:justify-end grow md:min-w-60 xl:min-w-auto",
+            index % 2 !== 0 && "sm:justify-start xl:justify-end",
+            className)}>
             <div className="flex flex-col gap-4">
                 <Text
                     value={title}
@@ -73,10 +78,11 @@ export default async function FooterSection(props: FooterSectionProps) {
             id={FOOTER_ID}
             as="footer"
             bg={'footer'}
+            width={'lg'}
             containerClassName={cn()}
             rootClassName="mt-auto border-t border-t-border/10 dark:border-t-border"
         >
-            <section className="grid grid-cols-1 sm:grid-cols-2 xl:flex gap-12 xl:gap-4 tracking-wider flex-wrap">
+            <section className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:*:grow gap-12 xl:gap-4 tracking-wider flex-wrap">
                 <div className="xl:w-3/10 flex flex-col gap-4">
                     <Logo size={'footer'} />
                     <Text value={data.description} size={textsizeSM} />
@@ -84,23 +90,21 @@ export default async function FooterSection(props: FooterSectionProps) {
                 </div>
 
                 <TitleContent
+                    index={index++}
                     title="Lagos Island Flagship"
                     content={
                         <>
                             <Text size={textsizeXS} weight="bold" color={"white"} value={formatAddress({
                                 address: store.address, operation: 'pick', options: { name: true }
-                            })}
-                            />
+                            })} />
 
                             <Text size={textsizeXS} value={formatAddress({
                                 address: store.address, operation: 'pick', options: { houseNumber: true, street: true }
-                            })}
-                            />
+                            })} />
 
                             <Text size={textsizeXS} value={formatAddress({
                                 address: store.address, operation: 'pick', options: { city: true, state: true, country: true }
-                            })}
-                            />
+                            })} />
                         </>
                     }
                 >
@@ -115,8 +119,8 @@ export default async function FooterSection(props: FooterSectionProps) {
                 </TitleContent>
 
                 <TitleContent
+                    index={index++}
                     title="Storefront"
-                    className="sm:justify-start xl:justify-end"
                     content={
                         <>
                             {store.services.map((service, i) => (
@@ -134,7 +138,25 @@ export default async function FooterSection(props: FooterSectionProps) {
                 />
 
                 <TitleContent
+                    index={index++}
+                    title="Legal"
+                    content={
+                        <>
+                            <Text size={textsizeXS} value={"Terms of use"} render={{
+                                type: "page", href: TERMS_ROUTE,
+                            }} />
+
+                            <Text size={textsizeXS} value={"Privacy Policy"} render={{
+                                type: "page", href: POLICY_ROUTE,
+                            }} />
+                        </>
+                    }
+                />
+
+                <TitleContent
+                    index={index++}
                     title="Client Concierge"
+                    className="sm:justify-start xl:justify-end"
                     content={
                         <>
                             <Information

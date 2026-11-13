@@ -26,7 +26,7 @@ export async function HeroSection() {
                 topClassName="gap-y-app-xs"
                 top={
                     <>
-                        {/* <Tag title={data.badge} variant={'outline'} shape={'pill'} icon={<Sparkles />}
+                        <Tag title={data.badge} variant={'outline'} shape={'pill'} icon={<Sparkles />}
                             titleProps={{
                                 color: "primary",
                                 tracking: "wider",
@@ -36,9 +36,9 @@ export async function HeroSection() {
                                 align: 'center',
                             }}
                             titleClassName="max-sm:text-3xs" iconClassName="max-sm:[&_svg]:size-2.5"
-                        /> */}
+                        />
 
-                        <H1 title={data.headline} titleSize={'hero'} font={'serif'} align={'center'}
+                        <H1 title={data.headline} align={'center'} size={"hero"}
                             rootClassName="max-w-9/10 md:max-w-200" />
 
                         <Text value={data.description} align={'center'} size={'sm'}
@@ -53,13 +53,13 @@ export async function HeroSection() {
                                 tracking: "wider",
                                 align: 'center',
                                 wrap: false,
-                                size:'xs'
+                                size: 'xs'
                             }}
                             descriptionProps={{
                                 tracking: "wide",
                                 wrap: true,
                                 align: 'center',
-                                size:'xs'
+                                size: 'xs'
                             }}
                             className={cn(
                                 'lg:max-w-200 border-t pt-card mt-card grid grid-cols-2 md:grid-cols-4 ',

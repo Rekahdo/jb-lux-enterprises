@@ -2,14 +2,98 @@
 
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "cn";
-import { scrollToId, ScrollToIdType } from "./navigation";
-import { ElementType, HtmlHTMLAttributes, ReactNode } from "react";
+import { ElementType, MouseEvent, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { HEADER_ID } from "../section/header-section";
+
+export type ScrollToIdType = {
+  id: string;
+  destinationPath: string;
+  currentPath?: string;
+  router?: AppRouterInstance;
+  onNavigateAction?: () => void;
+  scrollType?: ScrollBehavior;
+  e?: MouseEvent<HTMLElement>;
+}
+
+export function scrollToId({
+  id,
+  destinationPath,
+  currentPath,
+  router,
+  onNavigateAction,
+  scrollType = "smooth",
+  e,
+}: ScrollToIdType) {
+  e?.preventDefault();
+  onNavigateAction?.();
+
+  const targetId = id.startsWith("#") ? id.slice(1) : id;
+
+  const performScroll = () => {
+    const element = document.getElementById(targetId);
+    if (!element) return false;
+
+    const OFFSET = document.getElementById(HEADER_ID)?.getBoundingClientRect().height ?? 0;
+    const top = element.getBoundingClientRect().top + window.scrollY - OFFSET;
+
+    window.scrollTo({ top, behavior: scrollType });
+    return true;
+  };
+
+  // 1. If we are already on the same page, scroll immediately
+  if (!router || !currentPath || currentPath === destinationPath) {
+    performScroll();
+    return;
+  }
+
+  // 2. If we are navigating, push the route
+  router.push(destinationPath);
+
+  // 3. Setup an observer to watch the DOM for when the new page mounts
+  let observer: MutationObserver;
+
+  const disconnectObserver = () => {
+    if (observer) observer.disconnect();
+  };
+
+  observer = new MutationObserver(() => {
+    // Try to scroll. If successful (returns true), clean up the observer.
+    const success = performScroll();
+    if (success) {
+      disconnectObserver();
+    }
+  });
+
+  // Start observing the document body for child additions (which happens when Next.js swaps pages)
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  // 4. Safety fallback: Disconnect the observer after 3 seconds just in case the element never renders
+  setTimeout(disconnectObserver, 3000);
+}
 
 export const textVariants = cva("", {
   variants: {
+    variant: {
+      outline: cn("leading-0!",
+        "rounded-full bg-foreground text-primary border-2 border-background/20",
+        "dark:border-foreground/20 dark:bg-background  transition-all",
+        "backdrop-blur-xs supports-backdrop-filter:bg-foreground/10"
+      )
+    },
     size: {
+      hero: "text-3xl sm:text-5xl md:text-6xl font-extrabold uppercase",
+      h1: "text-4xl sm:text-5xl font-extrabold",
+      h2: "text-2xl sm:text-4xl font-bold",
+      h3: "text-xl sm:text-3xl font-bold",
+      h4: "text-lg sm:text-2xl font-bold",
+      h5: "text-base sm:text-xl font-bold",
+      h6: "text-sm sm:text-base font-bold",
       '5xs': "text-[4px]",
       '4xs': "text-[6px]",
       '3xs': "text-[8px]",
@@ -62,6 +146,7 @@ export const textVariants = cva("", {
       '80%': "w-8/10",
       '90%': "w-9/10",
       '100%': "w-full",
+      full: "w-full",
     },
     tracking: {
       tighter: "tracking-tighter",
@@ -169,9 +254,9 @@ export default function Text({
   const isTag = render?.type === "tag";
   const isLink = Boolean(render) && !isTag;
 
-  let Tag: ElementType = isTag ? render.as : isLink ? Link : 'p';
+  let Tag: ElementType = isTag ? render.as : isLink ? Link : 'div';
   let tagAttributes: Record<string, unknown> = {};
-
+  ''
   const scroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (render && render.type === "scroll") {
       scrollToId({ id: render.id, currentPath: pathname, destinationPath: (render.href ?? pathname), e, router });
@@ -214,8 +299,8 @@ export default function Text({
       className={cn(
         isLink && "hover:text-primary",
         textVariants({ ...props }),
-        className
-        )}>
+        className,
+      )}>
       {value}
     </Tag>
   )

@@ -32,7 +32,8 @@ export const containerVariants = cva(
                 fit: 'h-fit',
             },
             width: {
-                default: "max-w-450",
+                default: "max-w-350",
+                lg: "max-w-450",
             },
             direction: {
                 row: "flex-row",

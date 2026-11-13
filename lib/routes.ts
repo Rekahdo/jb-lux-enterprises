@@ -19,6 +19,7 @@ const ROUTE = {
   about: "/about",
   contact: "/contact",
   policy: "/policy",
+  terms: "/terms",
   storefront: "/storefront",
   flagship: "/flagship",
 } as const;
@@ -42,5 +43,6 @@ export const PROFILE_ROUTE = ROUTE.profile;
 export const ABOUT_ROUTE = ROUTE.about;
 export const CONTACT_ROUTE = ROUTE.contact;
 export const POLICY_ROUTE = ROUTE.policy;
+export const TERMS_ROUTE = ROUTE.terms;
 export const STOREFRONT_ROUTE = ROUTE.storefront;
 export const FLAGSHIP_ROUTE = ROUTE.flagship;

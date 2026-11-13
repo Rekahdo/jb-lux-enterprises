@@ -16,6 +16,7 @@ export const AnnouncementSection = async () => {
     <Container
       as={"header"}
       py={'none'}
+      width={'lg'}
       sticky={'top'}
       direction="row"
       containerClassName="py-1 justify-between"

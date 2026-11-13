@@ -10,7 +10,6 @@ import {
 } from "react";
 import { Button, buttonVariants } from "../ui/button";
 import { Download, ExternalLink, Loader } from "lucide-react";
-import { scrollToId, ScrollToIdType } from "./navigation";
 
 export const buttonImplVariants = cva("flex gap-2", {
     variants: {
@@ -165,6 +164,7 @@ export function ButtonImpl({
     );
 } import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { scrollToId, ScrollToIdType } from "./text";
 
 export interface ButtonImplGroupProps {
     className?: string;
