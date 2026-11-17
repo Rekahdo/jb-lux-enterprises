@@ -1,15 +1,15 @@
 import { visitStoreValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { AddressType, PhoneNumberType, SrcImageType } from "./reset";
 import { storeSettingsData } from "./store-settings";
+import { AddressPropType, PhonePropType, SrcImageType } from "./reset";
 
 type ValidatorType = Infer<typeof visitStoreValidator>;
 
-type PromiseType = Omit<ValidatorType, "imageIds" | "addressId" | "phoneId"> & {
-  imageIds: SrcImageType[];
-  addressId: AddressType;
-  phoneId: PhoneNumberType;
-};
+type PromiseType = Omit<ValidatorType, "imageIds" | "addressId" | "phoneId"> &
+  AddressPropType &
+  PhonePropType & {
+    imageIds: SrcImageType[];
+  };
 
 export const visitStoreData: Promise<PromiseType> = Promise.resolve({
   badge: "Gbode Ventures Plaza • Lagos Island",
@@ -24,7 +24,9 @@ export const visitStoreData: Promise<PromiseType> = Promise.resolve({
   description:
     "Located in the heart of Lagos Island's historic mercantile district on Nnamdi Azikiwe Street, JB Lux Enterprises crafts premium unisex streetwear and bespoke tailoring for men and women with world-class precision.",
   addressId: (await storeSettingsData).addressId,
+  address: (await storeSettingsData).address,
   addressNote: "In-person consultations & bulk collections available.",
   phoneId: (await storeSettingsData).phoneId,
+  phone: (await storeSettingsData).phone,
   phoneNote: "Direct line / WhatsApp",
 });

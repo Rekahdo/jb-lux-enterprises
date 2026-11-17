@@ -1,7 +1,9 @@
 import { ordersValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { statusData, StatusType } from "./stats";
-import { AddressType, HrefFile, PhoneNumberType } from "./reset";
+import { AddressPropType, HrefFile, PhonePropType } from "./reset";
+import { AddressType, findAddressById } from "./address";
+import { findPhoneById, PhoneType } from "./phone";
 
 type ValidatorType = Infer<typeof ordersValidator>;
 
@@ -10,14 +12,14 @@ type ItemsType = ValidatorType["items"][number];
 type PromiseType = Omit<
   ValidatorType,
   "bankReceipt" | "items" | "addressId" | "phoneId" | "statusId"
-> & {
-  id: string;
-  bankReceipt: HrefFile;
-  items: (Omit<ItemsType, "productId"> & { productId: string })[];
-  addressId: AddressType;
-  phoneId: PhoneNumberType;
-  statusId: StatusType;
-};
+> &
+  AddressPropType &
+  PhonePropType & {
+    id: string;
+    bankReceipt: HrefFile;
+    items: (Omit<ItemsType, "productId"> & { productId: string })[];
+    statusId: StatusType;
+  };
 
 const statsData = await statusData;
 
@@ -29,16 +31,10 @@ export const ordersData: Promise<PromiseType[]> = Promise.resolve([
     firstName: "Richard",
     lastName: "Okafor",
     email: "okaforrichard76@gmail.com",
-    phoneId: { code: "+234", number: "9059405621" },
-    addressId: {
-      houseNumber: "14",
-      street: "Admiralty Way, Lekki Phase 1",
-      city: "Lekki",
-      state: "Lagos",
-      country: "Nigeria",
-      postalCode: "106104",
-      closestBusStop: "Admiralty Roundabout",
-    },
+    phoneId: "phn-02",
+    phone: await findPhoneById("phn-02"),
+    addressId: "add-02",
+    address: await findAddressById("add-02"),
     bankReceipt: {
       href: "/doc/Bank Transfer Receipt.pdf",
       name: "bank_receipt_oct_24.pdf",

@@ -20,6 +20,16 @@ export const addressData: Promise<AddressType[]> = Promise.resolve([
     postalCode: "101241",
     closestBusStop: "Idumota Bus-stop",
   },
+  {
+    id: "add-02",
+    houseNumber: "14",
+    street: "Admiralty Way, Lekki Phase 1",
+    city: "Lekki",
+    state: "Lagos",
+    country: "Nigeria",
+    postalCode: "106104",
+    closestBusStop: "Admiralty Roundabout",
+  },
 ]);
 
 export async function findAddressById(id: string): Promise<AddressType | undefined> {

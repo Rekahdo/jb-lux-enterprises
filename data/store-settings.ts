@@ -2,16 +2,14 @@ import { storeSettingsValidator } from "@/convex/schema";
 import { FLAGSHIP_ROUTE, ORDERS_ROUTE, STOREFRONT_ROUTE } from "@/lib/routes";
 import { Infer } from "convex/values";
 import { AddressType, findAddressById } from "./address";
-import { findPhoneNumberById as findPhoneById, PhoneType } from "./phone";
+import { findPhoneById as findPhoneById, PhoneType } from "./phone";
+import { AddressPropType, PhonePropType } from "./reset";
 
 type ValidatorType = Infer<typeof storeSettingsValidator>;
 
-type PromiseType = Omit<ValidatorType, "addressId" | "phoneId"> & {
-  addressId: string;
-  address: AddressType | undefined;
-  phoneId: string;
-  phone: PhoneType | undefined;
-};
+type PromiseType = Omit<ValidatorType, "addressId" | "phoneId"> &
+  AddressPropType &
+  PhonePropType & {};
 
 export const storeSettingsData: Promise<PromiseType> = Promise.resolve({
   brandName: "JB Lux Enterprises",
