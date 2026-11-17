@@ -20,7 +20,7 @@ const informationVariants = cva("", {
 });
 
 export interface InformationProps {
-  text: string;
+  text: string | undefined;
   textProps?: VariantProps<typeof textVariants>;
   type?: "phone" | "email" | "address" | "secure" | "any";
   icon?: ReactNode;
@@ -42,6 +42,7 @@ export default function Information({
   direction = "x",
   className,
 }: InformationProps) {
+  if(!text) return null;
 
   const contact = {
     phone: { href: `tel:${text}`, icon: icon ?? <Phone /> },

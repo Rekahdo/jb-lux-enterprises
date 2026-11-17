@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as errors from "../errors.js";
 import type * as http from "../http.js";
+import type * as product from "../product.js";
 import type * as role from "../role.js";
 
 import type {
@@ -23,6 +24,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   errors: typeof errors;
   http: typeof http;
+  product: typeof product;
   role: typeof role;
 }>;
 
