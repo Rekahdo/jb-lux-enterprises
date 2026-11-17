@@ -8,6 +8,7 @@ import { Category } from "./category";
 import { cn } from "cn";
 import { useEffect, useState } from "react";
 import { CategoryType } from "@/data/categories";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 export interface ProductsProps extends titleType {
     as: "default" | "popular" | "featured" | "category";
@@ -50,7 +51,7 @@ export function Products({
             {as === "category" && (
                 <ShowAsCategory
                     products={filtered as CategoryType[]}
-                    className="flex gap-2 sm:gap-8 overflow-x-auto rounded-lg"
+                    className="flex gap-2 sm:gap-8 overflow-x-auto rounded-lg scrollbar-none"
                 />
             )}
 

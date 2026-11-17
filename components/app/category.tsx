@@ -16,10 +16,10 @@ export function Category({ category }: { category: CategoryType }) {
 
     return (
         <Card
-            data-slot="product"
+            data-slot="product-category"
             onClick={() => router.push(STOREFRONT_ROUTE)}
             className={cn(
-                "@container p-0! gap-0! aspect-2/2.5 group/product shadow-sm md:shadow-md lg:shadow-lg",
+                "@container p-0! gap-0! aspect-2/2.5 group/product-category shadow-sm md:shadow-md lg:shadow-lg",
                 "relative min-w-60 sm:min-w-60 hover:cursor-pointer",
             )}
         >
@@ -31,7 +31,7 @@ export function Category({ category }: { category: CategoryType }) {
                     sizes="(max-width: 768px) 100vw, 340px"
                     className={cn(
                         "object-cover object-top scale-101",
-                        "group-hover/product:scale-110 group-active/product:scale-100",
+                        "group-hover/product-category:scale-110 group-active/product-category:scale-100",
                         "transition-all duration-500 ease-in-out",
                     )}
                 />
@@ -56,7 +56,7 @@ export function Category({ category }: { category: CategoryType }) {
                         title={title}
                         tracking="wide"
                         color="white"
-                        className="group-hover/product:text-primary text-[12cqw]!"
+                        className="group-hover/product-category:text-primary text-[12cqw]!"
                     />
                     <Text
                         tracking="wider"
@@ -71,7 +71,6 @@ export function Category({ category }: { category: CategoryType }) {
                 height="h-full"
                 from="from-black"
                 via="via-black/50"
-                className=""
             />
         </Card>
     );

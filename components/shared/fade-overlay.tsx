@@ -20,6 +20,7 @@ type FadeOverlayProps = VariantProps<typeof fadeOverlayVariants> & {
     from?: string;
     via?: string;
     to?: string;
+    hover?: string;
     className?: string;
 };
 
@@ -28,6 +29,7 @@ export function FadeOverlay({
     from = "from-background",
     via,
     to = "to-transparent",
+    hover,
     direction = "to-top",
     className,
 }: FadeOverlayProps) {
@@ -40,6 +42,7 @@ export function FadeOverlay({
                 from,
                 via,
                 to,
+                hover,
                 className
             )}
         />

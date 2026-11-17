@@ -19,7 +19,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
       "Premium menswear and unisex streetwear, from tailored suits to heavyweight cotton essentials.",
     count: 5,
     imageId: {
-      src: "https://picsum.photos/seed/cat-01-clothing-apparel/800/800",
+      src: "/image/jacket.jpg",
       alt: "Clothing & Apparel",
     },
   },
@@ -132,4 +132,3 @@ export async function findCategoryById(
 ): Promise<CategoryType | undefined> {
   return (await categoriesData).find((each) => each.id === id);
 }
-  
