@@ -13,7 +13,7 @@ import { Unauthenticated } from "convex/react";
 import AuthRoute from "../shared/auth-route";
 import { storeSettingsData } from "@/data/store-settings";
 import { FacebookFillIcon } from "../icon/akar-icons-facebook-fill";
-import { formatAddress, formatPhoneNumber } from "@/lib/format";
+import { formatAddress, formatPhone } from "@/lib/format";
 import Text from "../shared/text";
 import Information from "../shared/infomation";
 import { ReactNode } from "react";
@@ -162,7 +162,7 @@ export default async function FooterSection(props: FooterSectionProps) {
                             <Information
                                 size={textsizeXS}
                                 type="phone"
-                                text={formatPhoneNumber({ phoneNumber: store.phoneNumber })}
+                                text={formatPhone({ phone: store.phone })}
                                 textProps={{
                                     font: "mono"
                                 }}

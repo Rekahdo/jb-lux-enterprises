@@ -1,11 +1,11 @@
 import { heroValidator } from "@/convex/schema";
-import { SrcImage } from "@/data/header";
 import { Infer } from "convex/values";
+import { SrcImageType } from "./reset";
 
 type ValidatorType = Infer<typeof heroValidator>;
 
-type PromiseType = Omit<ValidatorType, "images"> & {
-  images: SrcImage[];
+type PromiseType = Omit<ValidatorType, "imageIds"> & {
+  imageIds: SrcImageType[];
 };
 
 export const heroData: Promise<PromiseType> = Promise.resolve({
@@ -13,7 +13,7 @@ export const heroData: Promise<PromiseType> = Promise.resolve({
   headline: "Where Royal Heritage Meets Contemporary Urban Apparel",
   description:
     "Crafted at Gbode Ventures Plaza, Lagos Island. Tailored Senator attires, heavyweight luxury unisex streetwear, and sartorial silhouettes engineered for men and women of distinction. Available in single retail and high-volume wholesale tiers.",
-  images: [
+  imageIds: [
     {
       src: "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=2000&auto=format&fit=crop",
       alt: "Man wearing a dark luxury heritage jacket standing against a modern city skyline at dusk",

@@ -233,7 +233,7 @@ export type TagType = { type: "tag"; as: ElementType };
 export type RenderLinkType = PageType | ScrollType | DownloadType | ExternalType | TagType;
 
 export interface TextProps extends VariantProps<typeof textVariants> {
-  value: ReactNode;
+  value: ReactNode | undefined;
   id?: string;
   className?: string;
   render?: RenderLinkType;
@@ -248,6 +248,8 @@ export default function Text({
   onClick,
   ...props
 }: TextProps) {
+  if (!value) return null;
+
   const router = useRouter();
   const pathname = usePathname();
 

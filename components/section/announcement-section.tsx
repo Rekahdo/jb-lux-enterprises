@@ -1,12 +1,12 @@
 import { Container } from "../shared/container";
 import { cn } from "cn";
-import { backDropBlur } from "../shared/_css";
 import { announcementData } from "@/data/announcement";
-import { MapPin } from "lucide-react";
 import { storeSettingsData } from "@/data/store-settings";
-import { formatAddress, formatPhoneNumber } from "@/lib/format";
+import { formatAddress, formatPhone } from "@/lib/format";
 import Information from "../shared/infomation";
 import Text from "../shared/text";
+import { AddressType } from "@/data/address";
+import { PhoneType } from "@/data/phone";
 
 export const AnnouncementSection = async () => {
   const announcement = await announcementData;
@@ -49,7 +49,7 @@ export const AnnouncementSection = async () => {
         size={"xs"}
         type="phone"
         className="shrink-0 pl-4"
-        text={formatPhoneNumber({ phoneNumber: store.phoneNumber })}
+        text={formatPhone({ phone: store.phone })}
         textProps={{
           wrap: false
         }}

@@ -1,18 +1,15 @@
 import { productsValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { SrcImage } from "./header";
-
-export type ColorImage = {
-  name: string;
-  hex?: string;
-  image: SrcImage;
-};
+import { ColorImage } from "./reset";
+import { findSubCategoryById, SubCategoryType } from "./subcategories";
 
 type ValidatorType = Infer<typeof productsValidator>;
 
-export type ProductType = Omit<ValidatorType, "colors"> & {
+export type ProductType = Omit<ValidatorType, "colors" | "subCategoryId"> & {
   id: string;
   colors: ColorImage[];
+  subCategoryId: string;
+  subCategory: SubCategoryType | undefined;
 };
 
 export const productsData: Promise<ProductType[]> = Promise.resolve([
@@ -24,8 +21,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "ATELIER SIGNATURE",
     tagline:
       "Crafted for distinction \u2014 traditional & cultural wear engineered with cashmere wool blend.",
-    category: "Clothing / Apparel",
-    subCategory: "Traditional & Cultural Wear",
+    subCategoryId: "sub-04",
+    subCategory: await findSubCategoryById("sub-04"),
     gender: "male",
     description:
       "Refined luxury senator suit tailored from cashmere wool blend, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -41,7 +38,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Obsidian Black",
         hex: "#141311",
         image: {
-          src: "https://picsum.photos/seed/luxury-senator-suit-1-0/800/1000",
+          src: "https://picsum.photos/seed/luxury-senator-suit-1-obsidian-black/800/1000",
           alt: "Luxury Senator Suit - Obsidian Black",
         },
       },
@@ -49,7 +46,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Champagne Gold",
         hex: "#D4AF37",
         image: {
-          src: "https://loremflickr.com/800/1000/suit,fashion?lock=11",
+          src: "https://picsum.photos/seed/luxury-senator-suit-1-champagne-gold/800/1000",
           alt: "Luxury Senator Suit - Champagne Gold",
         },
       },
@@ -57,7 +54,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Ivory Cream",
         hex: "#FAF8F5",
         image: {
-          src: "https://picsum.photos/seed/luxury-senator-suit-1-2/800/1000",
+          src: "https://picsum.photos/seed/luxury-senator-suit-1-ivory-cream/800/1000",
           alt: "Luxury Senator Suit - Ivory Cream",
         },
       },
@@ -71,10 +68,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Cashmere Wool Blend",
       provenance: "Hand-crafted at Gbode Ventures Plaza Atelier, Lagos Island",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: true,
-    rating: 4.7,
+    rating: {
+      r2: 4,
+      r4: 30,
+      r6: 30,
+      r8: 20,
+      r10: 55,
+    },
   },
   {
     id: "prod_002",
@@ -83,8 +83,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "LIMITED DROP",
     tagline:
       "Crafted for distinction \u2014 outerwear engineered with virgin wool twill.",
-    category: "Clothing / Apparel",
-    subCategory: "Outerwear",
+    subCategoryId: "sub-03",
+    subCategory: await findSubCategoryById("sub-03"),
     gender: "female",
     description:
       "Refined signature blazer tailored from virgin wool twill, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -100,7 +100,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Midnight Navy",
         hex: "#1B263B",
         image: {
-          src: "https://loremflickr.com/800/1000/blazer,fashion?lock=20",
+          src: "https://picsum.photos/seed/signature-blazer-2-midnight-navy/800/1000",
           alt: "Signature Blazer - Midnight Navy",
         },
       },
@@ -108,7 +108,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Espresso Brown",
         hex: "#3E2723",
         image: {
-          src: "https://picsum.photos/seed/signature-blazer-2-1/800/1000",
+          src: "https://picsum.photos/seed/signature-blazer-2-espresso-brown/800/1000",
           alt: "Signature Blazer - Espresso Brown",
         },
       },
@@ -116,7 +116,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Warm Sand",
         hex: "#D6C7B2",
         image: {
-          src: "https://loremflickr.com/800/1000/blazer,fashion?lock=22",
+          src: "https://picsum.photos/seed/signature-blazer-2-warm-sand/800/1000",
           alt: "Signature Blazer - Warm Sand",
         },
       },
@@ -130,10 +130,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Virgin Wool Twill",
       provenance: "Tailored in Lagos Island with imported Italian textiles",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.8,
+    rating: {
+      r2: 4,
+      r4: 30,
+      r6: 40,
+      r8: 20,
+      r10: 20,
+    },
   },
   {
     id: "prod_003",
@@ -142,8 +145,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "BESTSELLER",
     tagline:
       "Crafted for distinction \u2014 bottoms engineered with heavyweight cotton twill.",
-    category: "Clothing / Apparel",
-    subCategory: "Bottoms",
+    subCategoryId: "sub-02",
+    subCategory: await findSubCategoryById("sub-02"),
     gender: "unisex",
     description:
       "Refined premium trousers tailored from heavyweight cotton twill, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -159,7 +162,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Charcoal Slate",
         hex: "#2F323A",
         image: {
-          src: "https://picsum.photos/seed/premium-trousers-3-0/800/1000",
+          src: "https://picsum.photos/seed/premium-trousers-3-charcoal-slate/800/1000",
           alt: "Premium Trousers - Charcoal Slate",
         },
       },
@@ -167,7 +170,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Olive Drab",
         hex: "#4B5320",
         image: {
-          src: "https://loremflickr.com/800/1000/trousers,fashion?lock=31",
+          src: "https://picsum.photos/seed/premium-trousers-3-olive-drab/800/1000",
           alt: "Premium Trousers - Olive Drab",
         },
       },
@@ -175,7 +178,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Burgundy Wine",
         hex: "#5E1914",
         image: {
-          src: "https://picsum.photos/seed/premium-trousers-3-2/800/1000",
+          src: "https://picsum.photos/seed/premium-trousers-3-burgundy-wine/800/1000",
           alt: "Premium Trousers - Burgundy Wine",
         },
       },
@@ -190,10 +193,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       provenance:
         "Engineered at JB Lux Flagship Studio, Nnamdi Azikiwe St, Lagos",
     },
-    isFeatured: false,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.9,
+    rating: {
+      r2: 4,
+      r4: 49,
+      r6: 30,
+      r8: 49,
+      r10: 55,
+    },
   },
   {
     id: "prod_004",
@@ -202,8 +208,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "NEW ARRIVAL",
     tagline:
       "Crafted for distinction \u2014 tops engineered with egyptian giza cotton.",
-    category: "Clothing / Apparel",
-    subCategory: "Tops",
+    subCategoryId: "sub-01",
+    subCategory: await findSubCategoryById("sub-01"),
     gender: "male",
     description:
       "Refined urban shirt tailored from egyptian giza cotton, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -219,7 +225,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Onyx Black",
         hex: "#0F0F0F",
         image: {
-          src: "https://loremflickr.com/800/1000/shirt,fashion?lock=40",
+          src: "https://picsum.photos/seed/urban-shirt-4-onyx-black/800/1000",
           alt: "Urban Shirt - Onyx Black",
         },
       },
@@ -227,7 +233,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Stone Gray",
         hex: "#8E8E93",
         image: {
-          src: "https://picsum.photos/seed/urban-shirt-4-1/800/1000",
+          src: "https://picsum.photos/seed/urban-shirt-4-stone-gray/800/1000",
           alt: "Urban Shirt - Stone Gray",
         },
       },
@@ -241,10 +247,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Egyptian Giza Cotton",
       provenance: "Small-batch atelier production, Lagos, Nigeria",
     },
-    isFeatured: false,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.7,
+    rating: {
+      r2: 4,
+      r4: 30,
+      r6: 10,
+      r8: 48,
+      r10: 55,
+    },
   },
   {
     id: "prod_005",
@@ -253,8 +262,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "WHOLESALE READY",
     tagline:
       "Crafted for distinction \u2014 one-pieces engineered with structured crepe.",
-    category: "Clothing / Apparel",
-    subCategory: "One-Pieces",
+    subCategoryId: "sub-05",
+    subCategory: await findSubCategoryById("sub-05"),
     gender: "female",
     description:
       "Refined classic dress tailored from structured crepe, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -270,7 +279,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Obsidian Black",
         hex: "#141311",
         image: {
-          src: "https://picsum.photos/seed/classic-dress-5-0/800/1000",
+          src: "https://picsum.photos/seed/classic-dress-5-obsidian-black/800/1000",
           alt: "Classic Dress - Obsidian Black",
         },
       },
@@ -278,7 +287,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Champagne Gold",
         hex: "#D4AF37",
         image: {
-          src: "https://loremflickr.com/800/1000/dress,fashion?lock=51",
+          src: "https://picsum.photos/seed/classic-dress-5-champagne-gold/800/1000",
           alt: "Classic Dress - Champagne Gold",
         },
       },
@@ -286,7 +295,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Ivory Cream",
         hex: "#FAF8F5",
         image: {
-          src: "https://picsum.photos/seed/classic-dress-5-2/800/1000",
+          src: "https://picsum.photos/seed/classic-dress-5-ivory-cream/800/1000",
           alt: "Classic Dress - Ivory Cream",
         },
       },
@@ -300,10 +309,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Structured Crepe",
       provenance: "Hand-crafted at Gbode Ventures Plaza Atelier, Lagos Island",
     },
-    isFeatured: false,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.9,
+    rating: {
+      r2: 4,
+      r4: 2,
+      r6: 20,
+      r8: 20,
+      r10: 44,
+    },
   },
 
   // ---------- Footwear ----------
@@ -314,8 +326,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "ATELIER SIGNATURE",
     tagline:
       "Crafted for distinction \u2014 formal footwear engineered with hand-burnished calfskin leather.",
-    category: "Footwear",
-    subCategory: "Formal Footwear",
+    subCategoryId: "sub-08",
+    subCategory: await findSubCategoryById("sub-08"),
     gender: "female",
     description:
       "Refined urban penny loafers tailored from hand-burnished calfskin leather, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -331,7 +343,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Midnight Navy",
         hex: "#1B263B",
         image: {
-          src: "https://loremflickr.com/800/1000/loafers,shoes?lock=140",
+          src: "https://picsum.photos/seed/urban-penny-loafers-14-midnight-navy/800/1000",
           alt: "Urban Penny Loafers - Midnight Navy",
         },
       },
@@ -339,7 +351,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Espresso Brown",
         hex: "#3E2723",
         image: {
-          src: "https://picsum.photos/seed/urban-penny-loafers-14-1/800/1000",
+          src: "https://picsum.photos/seed/urban-penny-loafers-14-espresso-brown/800/1000",
           alt: "Urban Penny Loafers - Espresso Brown",
         },
       },
@@ -347,7 +359,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Warm Sand",
         hex: "#D6C7B2",
         image: {
-          src: "https://loremflickr.com/800/1000/loafers,shoes?lock=142",
+          src: "https://picsum.photos/seed/urban-penny-loafers-14-warm-sand/800/1000",
           alt: "Urban Penny Loafers - Warm Sand",
         },
       },
@@ -361,10 +373,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Hand-Burnished Calfskin Leather",
       provenance: "Tailored in Lagos Island with imported Italian textiles",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: true,
-    rating: 4.9,
+    rating: {
+      r2: 4,
+      r4: 30,
+      r6: 20,
+      r8: 20,
+      r10: 20,
+    },
   },
   {
     id: "prod_007",
@@ -373,8 +388,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "BESTSELLER",
     tagline:
       "Crafted for distinction \u2014 casual footwear engineered with suede & technical mesh.",
-    category: "Footwear",
-    subCategory: "Casual Footwear",
+    subCategoryId: "sub-07",
+    subCategory: await findSubCategoryById("sub-07"),
     gender: "unisex",
     description:
       "Refined classic court sneakers tailored from suede & technical mesh, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -390,7 +405,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Charcoal Slate",
         hex: "#2F323A",
         image: {
-          src: "https://picsum.photos/seed/classic-court-sneakers-15-0/800/1000",
+          src: "https://picsum.photos/seed/classic-court-sneakers-15-charcoal-slate/800/1000",
           alt: "Classic Court Sneakers - Charcoal Slate",
         },
       },
@@ -398,7 +413,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Olive Drab",
         hex: "#4B5320",
         image: {
-          src: "https://loremflickr.com/800/1000/sneakers,shoes?lock=151",
+          src: "https://picsum.photos/seed/classic-court-sneakers-15-olive-drab/800/1000",
           alt: "Classic Court Sneakers - Olive Drab",
         },
       },
@@ -406,7 +421,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Burgundy Wine",
         hex: "#5E1914",
         image: {
-          src: "https://picsum.photos/seed/classic-court-sneakers-15-2/800/1000",
+          src: "https://picsum.photos/seed/classic-court-sneakers-15-burgundy-wine/800/1000",
           alt: "Classic Court Sneakers - Burgundy Wine",
         },
       },
@@ -421,10 +436,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       provenance:
         "Engineered at JB Lux Flagship Studio, Nnamdi Azikiwe St, Lagos",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.7,
+    rating: {
+      r2: 4,
+      r4: 48,
+      r6: 11,
+      r8: 20,
+      r10: 29,
+    },
   },
   {
     id: "prod_008",
@@ -433,8 +451,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "NEW ARRIVAL",
     tagline:
       "Crafted for distinction \u2014 boots engineered with full-grain pull-up leather.",
-    category: "Footwear",
-    subCategory: "Boots",
+    subCategoryId: "sub-09",
+    subCategory: await findSubCategoryById("sub-09"),
     gender: "male",
     description:
       "Refined elite chelsea boots tailored from full-grain pull-up leather, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -450,7 +468,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Onyx Black",
         hex: "#0F0F0F",
         image: {
-          src: "https://loremflickr.com/800/1000/boots,leather?lock=160",
+          src: "https://picsum.photos/seed/elite-chelsea-boots-16-onyx-black/800/1000",
           alt: "Elite Chelsea Boots - Onyx Black",
         },
       },
@@ -458,7 +476,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Stone Gray",
         hex: "#8E8E93",
         image: {
-          src: "https://picsum.photos/seed/elite-chelsea-boots-16-1/800/1000",
+          src: "https://picsum.photos/seed/elite-chelsea-boots-16-stone-gray/800/1000",
           alt: "Elite Chelsea Boots - Stone Gray",
         },
       },
@@ -472,10 +490,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Full-Grain Pull-Up Leather",
       provenance: "Small-batch atelier production, Lagos, Nigeria",
     },
-    isFeatured: false,
-    isPopular: true,
-    isCategory: false,
-    rating: 5.0,
+    rating: {
+      r2: 4,
+      r4: 2,
+      r6: 30,
+      r8: 39,
+      r10: 1,
+    },
   },
 
   // ---------- Eyewear ----------
@@ -486,8 +507,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "ATELIER SIGNATURE",
     tagline:
       "Crafted for distinction \u2014 sunglasses engineered with 18k gold-plated titanium & polarized glass.",
-    category: "Eyewear",
-    subCategory: "Sunglasses",
+    subCategoryId: "sub-14",
+    subCategory: await findSubCategoryById("sub-14"),
     gender: "male",
     description:
       "Refined signature gold-rim aviators tailored from 18k gold-plated titanium & polarized glass, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -503,7 +524,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Onyx Black",
         hex: "#0F0F0F",
         image: {
-          src: "https://loremflickr.com/800/1000/aviator,sunglasses?lock=400",
+          src: "https://picsum.photos/seed/signature-gold-rim-aviators-40-onyx-black/800/1000",
           alt: "Signature Gold-Rim Aviators - Onyx Black",
         },
       },
@@ -511,7 +532,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Stone Gray",
         hex: "#8E8E93",
         image: {
-          src: "https://picsum.photos/seed/signature-gold-rim-aviators-40-1/800/1000",
+          src: "https://picsum.photos/seed/signature-gold-rim-aviators-40-stone-gray/800/1000",
           alt: "Signature Gold-Rim Aviators - Stone Gray",
         },
       },
@@ -525,10 +546,13 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "18k Gold-Plated Titanium & Polarized Glass",
       provenance: "Small-batch atelier production, Lagos, Nigeria",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: true,
-    rating: 4.7,
+    rating: {
+      r2: 4,
+      r4: 30,
+      r6: 58,
+      r8: 49,
+      r10: 90,
+    },
   },
   {
     id: "prod_010",
@@ -537,8 +561,8 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     badge: "WHOLESALE READY",
     tagline:
       "Crafted for distinction \u2014 sunglasses engineered with bio-acetate & polarized lenses.",
-    category: "Eyewear",
-    subCategory: "Sunglasses",
+    subCategoryId: "sub-14",
+    subCategory: await findSubCategoryById("sub-14"),
     gender: "female",
     description:
       "Refined premium tortoiseshell wayfarers tailored from bio-acetate & polarized lenses, combining Nigerian royal heritage with contemporary urban silhouettes.",
@@ -554,7 +578,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Obsidian Black",
         hex: "#141311",
         image: {
-          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-0/800/1000",
+          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-obsidian-black/800/1000",
           alt: "Premium Tortoiseshell Wayfarers - Obsidian Black",
         },
       },
@@ -562,7 +586,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Champagne Gold",
         hex: "#D4AF37",
         image: {
-          src: "https://loremflickr.com/800/1000/sunglasses,eyewear?lock=411",
+          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-champagne-gold/800/1000",
           alt: "Premium Tortoiseshell Wayfarers - Champagne Gold",
         },
       },
@@ -570,7 +594,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
         name: "Ivory Cream",
         hex: "#FAF8F5",
         image: {
-          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-2/800/1000",
+          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-ivory-cream/800/1000",
           alt: "Premium Tortoiseshell Wayfarers - Ivory Cream",
         },
       },
@@ -584,9 +608,18 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       fabric: "Bio-Acetate & Polarized Lenses",
       provenance: "Hand-crafted at Gbode Ventures Plaza Atelier, Lagos Island",
     },
-    isFeatured: true,
-    isPopular: true,
-    isCategory: false,
-    rating: 4.9,
+    rating: {
+      r2: 4,
+      r4: 21,
+      r6: 30,
+      r8: 32,
+      r10: 55,
+    },
   },
 ]);
+
+export async function findProductById(
+  id: string,
+): Promise<ProductType | undefined> {
+  return (await productsData).find((each) => each.id === id);
+}

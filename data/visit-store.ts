@@ -1,16 +1,19 @@
 import { visitStoreValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { SrcImage } from "@/data/header";
+import { AddressType, PhoneNumberType, SrcImageType } from "./reset";
+import { storeSettingsData } from "./store-settings";
 
 type ValidatorType = Infer<typeof visitStoreValidator>;
 
-type PromiseType = Omit<ValidatorType, "images"> & {
-  images: SrcImage[];
+type PromiseType = Omit<ValidatorType, "imageIds" | "addressId" | "phoneId"> & {
+  imageIds: SrcImageType[];
+  addressId: AddressType;
+  phoneId: PhoneNumberType;
 };
 
 export const visitStoreData: Promise<PromiseType> = Promise.resolve({
   badge: "Gbode Ventures Plaza • Lagos Island",
-  images: [
+  imageIds: [
     {
       src: "",
       alt: "Interior of the JB Lux Enterprises physical store at Gbode Ventures Plaza",
@@ -20,16 +23,8 @@ export const visitStoreData: Promise<PromiseType> = Promise.resolve({
   headline: "Experience JB Lux on Lagos Island",
   description:
     "Located in the heart of Lagos Island's historic mercantile district on Nnamdi Azikiwe Street, JB Lux Enterprises crafts premium unisex streetwear and bespoke tailoring for men and women with world-class precision.",
-  address: {
-    houseNumber: "Gbode Ventures Plaza",
-    street: "Nnamdi Azikiwe Street",
-    city: "Lagos Island",
-    state: "Lagos",
-    country: "Nigeria",
-    postalCode: "101241",
-    closestBusStop: "Idumota",
-  },
+  addressId: (await storeSettingsData).addressId,
   addressNote: "In-person consultations & bulk collections available.",
-  phoneNumber: "+234 905 940 5621",
+  phoneId: (await storeSettingsData).phoneId,
   phoneNote: "Direct line / WhatsApp",
 });

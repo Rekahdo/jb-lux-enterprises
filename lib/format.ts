@@ -1,4 +1,6 @@
 import { addressValidator, phoneValidator } from "@/convex/schema";
+import { AddressType } from "@/data/address";
+import { PhoneType } from "@/data/phone";
 import { Infer } from "convex/values";
 
 type FormatAddressOptionsType = {
@@ -20,10 +22,12 @@ export function formatAddress({
   operation,
   options,
 }: {
-  address: Infer<typeof addressValidator>;
+  address: Infer<typeof addressValidator> | AddressType | undefined;
   operation?: OperationType;
   options?: FormatAddressOptionsType;
 }) {
+  if (!address) return undefined;
+
   let initial: FormatAddressOptionsType = {
     name: true,
     buildingName: true,
@@ -55,15 +59,17 @@ export function formatAddress({
 
 type FormatPhoneNumberOptionsType = { code?: boolean; number?: boolean };
 
-export function formatPhoneNumber({
-  phoneNumber,
+export function formatPhone({
+  phone,
   operation,
   options,
 }: {
-  phoneNumber: Infer<typeof phoneValidator>;
+  phone: Infer<typeof phoneValidator> | PhoneType | undefined;
   options?: FormatPhoneNumberOptionsType;
   operation?: OperationType;
 }) {
+  if (!phone) return undefined;
+
   let initial: FormatPhoneNumberOptionsType = {
     code: true,
     number: true,
@@ -72,10 +78,10 @@ export function formatPhoneNumber({
   initial = filter({ initial, options, operation });
 
   const parts = [
-    initial.code && phoneNumber.code,
+    initial.code && phone.code,
     initial.number &&
-      phoneNumber.number &&
-      `${phoneNumber.number.slice(0, 3)} ${phoneNumber.number.slice(3, 6)} ${phoneNumber.number.slice(6)}`,
+      phone.number &&
+      `${phone.number.slice(0, 3)} ${phone.number.slice(3, 6)} ${phone.number.slice(6)}`,
   ];
 
   return parts.filter(Boolean).join(" ");
