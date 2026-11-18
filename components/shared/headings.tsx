@@ -83,7 +83,7 @@ function Heading({
 
             <Text
                 id={id}
-                render={{ type: "tag", as: Tag }}
+                render={{ as: "tag", tag: Tag }}
                 font={'serif'}
                 size={size}
                 wrap={wrap}
@@ -111,7 +111,7 @@ function Heading({
 
             {subtitle && (
                 <Text value={subtitle}
-                    render={{ type: "tag", as: "div" }}
+                    render={{ as: "tag", tag: "div" }}
                     font={'sans'}
                     className={cn("leading-relaxed", subtitleClassName)}
                     {...subtitleProps}
@@ -128,6 +128,8 @@ function Heading({
 export function H1(props: HeadingProps) {
     return <Heading
         level={1}
+        weight={'extrabold'}
+        casing={'upper'}
         {...props}
     />;
 }
@@ -135,8 +137,10 @@ export function H1(props: HeadingProps) {
 export function H2(props: HeadingProps) {
     return <Heading
         level={2}
-        rootClassName="gap-1"
-        overlineClassName="text-xs sm:text-sm"
+        weight={'bold'}
+        casing={'capitalize'}
+        rootClassName="gap-3"
+        overlineClassName="text-xs sm:text-sm uppercase"
         subtitleClassName="text-sm sm:text-base max-w-150"
         {...props}
     />;
@@ -145,6 +149,8 @@ export function H2(props: HeadingProps) {
 export function H3(props: HeadingProps) {
     return <Heading
         level={3}
+        weight={'bold'}
+        casing={'capitalize'}
         {...props}
     />;
 }

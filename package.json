@@ -13,6 +13,7 @@
     "@convex-dev/better-auth": "^0.13.0",
     "@hookform/resolvers": "^7.0.3",
     "better-auth": "~1.7.18",
+    "cashify": "^4.0.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "convex": "^1.49.0",
@@ -39,5 +40,5 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@12.6.0"
+  "packageManager": "pnpm@12.21.0"
 }

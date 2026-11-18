@@ -113,12 +113,12 @@ export const visitStoreTable = {
   addressNote: v.string(),
   phoneId: v.id("phones"),
   phoneNote: v.string(),
-}; 
+};
 
 export const visitStoreValidator = v.object(visitStoreTable);
 
 export const categoryTable = {
-  tag: v.string(),
+  badge: v.string(),
   slug: v.string(),
   title: v.string(),
   description: v.string(),
@@ -155,13 +155,21 @@ export const fitTable = {
 };
 export const fitValidator = v.object(fitTable);
 
+export const ratingValidator = v.object({
+  r2: v.number(),
+  r4: v.number(),
+  r6: v.number(),
+  r8: v.number(),
+  r10: v.number(),
+});
+
 export const productsTable = {
   name: v.string(),
   slug: v.string(),
   badge: v.string(),
   tagline: v.string(),
   subCategoryId: v.optional(v.id("subCategories")),
-  styleIds: v.optional(v.id("styles")),
+  styleId: v.id("styles"),
   gender: v.union(v.literal("male"), v.literal("female"), v.literal("unisex")),
   description: v.string(),
   fullDescription: v.string(),
@@ -173,10 +181,11 @@ export const productsTable = {
   colors: v.array(
     v.object({
       name: v.string(),
-      hex: v.optional(v.string()),
+      hex: v.string(),
       imageId: v.id("images"),
     }),
   ),
+  retailDiscount: v.number(),
   wholesaleTiers: v.optional(
     v.array(
       v.object({
@@ -189,13 +198,7 @@ export const productsTable = {
     fabric: v.string(),
     provenance: v.string(),
   }),
-  rating: v.object({
-    r2: v.number(),
-    r4: v.number(),
-    r6: v.number(),
-    r8: v.number(),
-    r10: v.number(),
-  }),
+  rating: ratingValidator,
 };
 export const productsValidator = v.object(productsTable);
 
@@ -270,6 +273,7 @@ const dayValidator = v.union(
 
 export const storeSettingsTable = {
   brandName: v.string(),
+  currentUnit: v.union(v.literal("NGN"), v.literal("USD"), v.literal("EUR")),
   year: v.string(),
   bankName: v.string(),
   accountName: v.string(),
@@ -330,7 +334,7 @@ export default defineSchema({
   categories: defineTable(categoryTable).index("by_slug", ["slug"]),
 
   popular: defineTable(popularTable).index("by_productId", ["productId"]),
-  
+
   featured: defineTable(featuredTable).index("by_productId", ["productId"]),
 
   subCategories: defineTable(subCategoryTable).index("by_categoryId", [

@@ -12,7 +12,7 @@ export type CategoryType = Omit<ValidatorType, "imageId"> & {
 export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   {
     id: "cat-01",
-    tag: "CLOTHING",
+    badge: "CLOTHING",
     slug: "clothing-apparel",
     title: "Clothing / Apparel",
     description:
@@ -25,7 +25,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-02",
-    tag: "FOOTWEAR",
+    badge: "FOOTWEAR",
     slug: "footwear",
     title: "Footwear",
     description:
@@ -38,7 +38,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-03",
-    tag: "HEADWEAR",
+    badge: "HEADWEAR",
     slug: "headwear",
     title: "Headwear",
     description:
@@ -51,7 +51,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-04",
-    tag: "EYEWEAR",
+    badge: "EYEWEAR",
     slug: "eyewear",
     title: "Eyewear",
     description:
@@ -64,7 +64,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-05",
-    tag: "JEWELRY",
+    badge: "JEWELRY",
     slug: "jewelry",
     title: "Fine Jewelry",
     description:
@@ -77,7 +77,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-06",
-    tag: "ACCESSORIES",
+    badge: "ACCESSORIES",
     slug: "accessories",
     title: "Accessories",
     description: "Full-grain leather belts, silk ties, and luxury hosiery.",
@@ -89,7 +89,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-07",
-    tag: "BAGS",
+    badge: "BAGS",
     slug: "bags-carrywear",
     title: "Bags & Carrywear",
     description: "Structured briefcases, weekend duffels, and crossbody bags.",
@@ -101,7 +101,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-08",
-    tag: "ACTIVEWEAR",
+    badge: "ACTIVEWEAR",
     slug: "activewear-swimwear",
     title: "Activewear & Swimwear",
     description:
@@ -114,7 +114,7 @@ export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   },
   {
     id: "cat-09",
-    tag: "SLEEPWEAR",
+    badge: "SLEEPWEAR",
     slug: "intimates-sleepwear",
     title: "Intimates & Sleepwear",
     description:

@@ -79,21 +79,21 @@ export function scrollToId({
 
 export const textVariants = cva("", {
   variants: {
-    variant: {
-      outline: cn("leading-0!",
-        "rounded-full bg-foreground text-primary border-2 border-background/20",
-        "dark:border-foreground/20 dark:bg-background  transition-all",
-        "backdrop-blur-xs supports-backdrop-filter:bg-foreground/10"
+    tag: {
+      outline: cn("leading-0! flex items-center",
+        "rounded-md bg-foreground text-primary border sm:border-2 border-background/20",
+        "dark:border-foreground/20 dark:bg-background transition-all",
+        "supports-backdrop-filter:bg-foreground/10 dark:supports-backdrop-filter:bg-background/10"
       )
     },
     size: {
-      hero: "text-3xl sm:text-5xl md:text-6xl font-extrabold uppercase",
-      h1: "text-4xl sm:text-5xl font-extrabold",
-      h2: "text-2xl sm:text-4xl font-bold",
-      h3: "text-xl sm:text-3xl font-bold",
-      h4: "text-lg sm:text-2xl font-bold",
-      h5: "text-base sm:text-xl font-bold",
-      h6: "text-sm sm:text-base font-bold",
+      hero: "text-3xl sm:text-5xl md:text-6xl",
+      h1: "text-4xl sm:text-5xl",
+      h2: "text-3xl sm:text-4xl",
+      h3: "text-2xl sm:text-3xl",
+      h4: "text-xl sm:text-2xl",
+      h5: "text-lg sm:text-xl",
+      h6: "text-base sm:text-lg",
       '5xs': "text-[4px]",
       '4xs': "text-[6px]",
       '3xs': "text-[8px]",
@@ -115,6 +115,7 @@ export const textVariants = cva("", {
       '11xl': "text-[12rem]",
     },
     weight: {
+      light: "font-light",
       normal: "font-normal",
       medium: "font-medium",
       semibold: "font-semibold",
@@ -124,7 +125,8 @@ export const textVariants = cva("", {
     color: {
       default: "text-foreground",
       white: "text-white",
-      gray: "text-gray-400",
+      lightgray: "text-gray-400",
+      gray: "text-[hsl(47,9%,31%)] dark:text-[hsl(51,11%,65%)]",
       foreground: "text-foreground",
       muted: "text-muted-foreground",
       primary: "text-primary",
@@ -168,7 +170,7 @@ export const textVariants = cva("", {
     },
     wrap: {
       true: "whitespace-pre-wrap",
-      false: "whitespace-nowrap",
+      false: "whitespace-nowrap text-nowrap overflow-hidden truncate w-full line-clamp-1",
     },
     truncate: {
       true: "truncate",
@@ -221,23 +223,24 @@ export const textVariants = cva("", {
   },
 });
 
-export type PageType = { type: "page"; href: string };
+export type PageType = { as: "page"; href: string };
 export type ScrollType = {
-  type: "scroll";
+  as: "scroll";
   id: string;
   href?: ScrollToIdType["destinationPath"]
 };
-export type DownloadType = { type: "download"; href: string; filename: string };
-export type ExternalType = { type: "external"; href: string; openTab?: boolean };
-export type TagType = { type: "tag"; as: ElementType };
-export type RenderLinkType = PageType | ScrollType | DownloadType | ExternalType | TagType;
+export type DownloadType = { as: "download"; href: string; filename: string };
+export type ExternalType = { as: "external"; href: string; openTab?: boolean };
+export type TagType = { as: "tag"; tag: ElementType };
+export type RenderType = PageType | ScrollType | DownloadType | ExternalType | TagType;
 
 export interface TextProps extends VariantProps<typeof textVariants> {
   value: ReactNode | undefined;
   id?: string;
   className?: string;
-  render?: RenderLinkType;
+  render?: RenderType;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  number?: boolean;
 }
 
 export default function Text({
@@ -246,6 +249,7 @@ export default function Text({
   className,
   render,
   onClick,
+  number,
   ...props
 }: TextProps) {
   if (!value) return null;
@@ -253,25 +257,26 @@ export default function Text({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isTag = render?.type === "tag";
+  const isTag = render?.as === "tag";
+  const isHeadings = (isTag && ["h1", "h2", "h3", "h4", "h5", "h6"].includes(render.tag as string))
   const isLink = Boolean(render) && !isTag;
 
-  let Tag: ElementType = isTag ? render.as : isLink ? Link : 'div';
+  let Tag: ElementType = isTag ? render.tag : isLink ? Link : 'div';
   let tagAttributes: Record<string, unknown> = {};
   ''
   const scroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (render && render.type === "scroll") {
+    if (render && render.as === "scroll") {
       scrollToId({ id: render.id, currentPath: pathname, destinationPath: (render.href ?? pathname), e, router });
     }
   };
 
   if (render) {
-    if (render.type === "page") {
+    if (render.as === "page") {
       tagAttributes = { href: render.href, type: undefined, onClick };
-    } else if (render.type === "scroll") {
+    } else if (render.as === "scroll") {
       Tag = "a";
       tagAttributes = { type: undefined, onClick: scroll };
-    } else if (render.type === "download") {
+    } else if (render.as === "download") {
       Tag = "a";
       tagAttributes = {
         href: render.href,
@@ -279,7 +284,7 @@ export default function Text({
         type: undefined,
         onClick,
       };
-    } else if (render.type === "external") {
+    } else if (render.as === "external") {
       const more = (render.openTab === undefined || render.openTab) ? {
         target: "_blank",
         rel: "noopener noreferrer",
@@ -299,8 +304,8 @@ export default function Text({
       {...tagAttributes}
       id={id}
       className={cn(
-        isLink && "hover:text-primary",
-        textVariants({ ...props }),
+        isLink && "hover:text-primary", number && "tabular-nums",
+        textVariants({ size: isHeadings ? render.tag as TextProps['size'] : props.size, ...props }),
         className,
       )}>
       {value}

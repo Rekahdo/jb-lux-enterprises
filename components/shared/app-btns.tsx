@@ -111,7 +111,7 @@ export function ProfileBtn({ className, ...props }: ButtonsProps) {
                 variant={'outline'}
                 className={cn(className)}
                 render={{
-                    type: "page",
+                    as: "page",
                     href: PROFILE_ROUTE
                 }}
                 {...props}
@@ -130,7 +130,7 @@ export function ExploreCollectionBtn({ className, ...props }: ButtonsProps) {
             height={'lg'}
             className={cn(className)}
             render={{
-                type: "page",
+                as: "page",
                 href: STOREFRONT_ROUTE
             }}
             {...props}
@@ -147,7 +147,7 @@ export function WholesaleBtn({ className, ...props }: ButtonsProps) {
             height={'lg'}
             className={cn(className)}
             render={{
-                type: "page",
+                as: "page",
                 href: STOREFRONT_ROUTE
             }}
             {...props}

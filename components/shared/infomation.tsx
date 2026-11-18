@@ -42,7 +42,7 @@ export default function Information({
   direction = "x",
   className,
 }: InformationProps) {
-  if(!text) return null;
+  if (!text) return null;
 
   const contact = {
     phone: { href: `tel:${text}`, icon: icon ?? <Phone /> },
@@ -56,13 +56,13 @@ export default function Information({
   const data = contact[type as keyof typeof contact];
 
   const linkProps = (isLink && "href" in data) ? {
-    render: { type: "external" as const, href: data.href, openTab: false }
+    render: { as: "external" as const, href: data.href, openTab: false }
   } : {};
 
   return (
     <div
       className={cn("flex items-center gap-2", className)}>
-        
+
       {contact[type].icon &&
         <span className={cn("text-primary", informationVariants({ size }))}>
           {contact[type].icon}
