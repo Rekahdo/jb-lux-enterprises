@@ -1,13 +1,13 @@
 import { visitStoreValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { storeSettingsData } from "./store-settings";
-import { AddressPropType, PhonePropType, SrcImageType } from "./reset";
+import { AddressProps, PhoneProps, SrcImageType } from "./reset";
 
 type ValidatorType = Infer<typeof visitStoreValidator>;
 
 type PromiseType = Omit<ValidatorType, "imageIds" | "addressId" | "phoneId"> &
-  AddressPropType &
-  PhonePropType & {
+  AddressProps &
+  PhoneProps & {
     imageIds: SrcImageType[];
   };
 

@@ -1,22 +1,32 @@
 import { productsValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { ColorImage } from "./reset";
+import { IdProp } from "./reset";
 import { findSubCategoryById, SubCategoryType } from "./subcategories";
 import { findStyleById, StyleType } from "./styles";
+import { ColorType, findColorById } from "./colors";
+import { ImagesType, findImageById } from "./images";
 
 type ValidatorType = Infer<typeof productsValidator>;
 
+export type ProductColorType = {
+  colorId: string;
+  color: ColorType;
+  imageId: string;
+  image: ImagesType;
+};
+
 export type ProductType = Omit<
   ValidatorType,
-  "colors" | "subCategoryId" | "styleId"
-> & {
-  id: string;
-  colors: ColorImage[];
-  subCategoryId: string;
-  subCategory: SubCategoryType | undefined;
-  styleId: string;
-  style: StyleType | undefined;
-};
+  "colors" | "subCategoryId" | "styleId" | "sizes"
+> &
+  IdProp & {
+    colors: ProductColorType[];
+    subCategoryId: string;
+    subCategory: SubCategoryType | undefined;
+    styleId: string;
+    style: StyleType | undefined;
+    sizes: string[];
+  };
 
 export const productsData: Promise<ProductType[]> = Promise.resolve([
   // ---------- Clothing / Apparel ----------
@@ -29,7 +39,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 traditional & cultural wear engineered with cashmere wool blend.",
     subCategoryId: "sub-04",
     subCategory: await findSubCategoryById("sub-04"),
-    styleId: "style-02", // Traditional
+    styleId: "style-02",
     style: await findStyleById("style-02"),
     gender: "male",
     description:
@@ -40,31 +50,25 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 46,
     isActive: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["sz-s", "sz-m", "sz-l", "sz-xl", "sz-xxl"],
     colors: [
       {
-        name: "Obsidian Black",
-        hex: "#141311",
-        image: {
-          src: "/image/jacket.jpg",
-          alt: "Luxury Senator Suit - Obsidian Black",
-        },
+        colorId: "col-obsidian-black",
+        color: (await findColorById("col-obsidian-black"))!,
+        imageId: "img-prod-001-obsidian-black",
+        image: (await findImageById("img-prod-001-obsidian-black"))!,
       },
       {
-        name: "Champagne Gold",
-        hex: "#D4AF37",
-        image: {
-          src: "https://picsum.photos/seed/luxury-senator-suit-1-champagne-gold/800/1000",
-          alt: "Luxury Senator Suit - Champagne Gold",
-        },
+        colorId: "col-champagne-gold",
+        color: (await findColorById("col-champagne-gold"))!,
+        imageId: "img-prod-001-champagne-gold",
+        image: (await findImageById("img-prod-001-champagne-gold"))!,
       },
       {
-        name: "Ivory Cream",
-        hex: "#FAF8F5",
-        image: {
-          src: "https://picsum.photos/seed/luxury-senator-suit-1-ivory-cream/800/1000",
-          alt: "Luxury Senator Suit - Ivory Cream",
-        },
+        colorId: "col-ivory-cream",
+        color: (await findColorById("col-ivory-cream"))!,
+        imageId: "img-prod-001-ivory-cream",
+        image: (await findImageById("img-prod-001-ivory-cream"))!,
       },
     ],
     retailDiscount: 0,
@@ -94,7 +98,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 outerwear engineered with virgin wool twill.",
     subCategoryId: "sub-03",
     subCategory: await findSubCategoryById("sub-03"),
-    styleId: "style-03", // Formal
+    styleId: "style-03",
     style: await findStyleById("style-03"),
     gender: "female",
     description:
@@ -105,31 +109,25 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: true,
     stock: 80,
     isActive: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["sz-s", "sz-m", "sz-l", "sz-xl", "sz-xxl"],
     colors: [
       {
-        name: "Midnight Navy",
-        hex: "#1B263B",
-        image: {
-          src: "/image/jacket.jpg",
-          alt: "Signature Blazer - Midnight Navy",
-        },
+        colorId: "col-midnight-navy",
+        color: (await findColorById("col-midnight-navy"))!,
+        imageId: "img-prod-002-midnight-navy",
+        image: (await findImageById("img-prod-002-midnight-navy"))!,
       },
       {
-        name: "Espresso Brown",
-        hex: "#3E2723",
-        image: {
-          src: "https://picsum.photos/seed/signature-blazer-2-espresso-brown/800/1000",
-          alt: "Signature Blazer - Espresso Brown",
-        },
+        colorId: "col-espresso-brown",
+        color: (await findColorById("col-espresso-brown"))!,
+        imageId: "img-prod-002-espresso-brown",
+        image: (await findImageById("img-prod-002-espresso-brown"))!,
       },
       {
-        name: "Warm Sand",
-        hex: "#D6C7B2",
-        image: {
-          src: "https://picsum.photos/seed/signature-blazer-2-warm-sand/800/1000",
-          alt: "Signature Blazer - Warm Sand",
-        },
+        colorId: "col-warm-sand",
+        color: (await findColorById("col-warm-sand"))!,
+        imageId: "img-prod-002-warm-sand",
+        image: (await findImageById("img-prod-002-warm-sand"))!,
       },
     ],
     retailDiscount: 10,
@@ -159,7 +157,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 bottoms engineered with heavyweight cotton twill.",
     subCategoryId: "sub-02",
     subCategory: await findSubCategoryById("sub-02"),
-    styleId: "style-07", // Minimalist
+    styleId: "style-07",
     style: await findStyleById("style-07"),
     gender: "unisex",
     description:
@@ -170,31 +168,25 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 40,
     isActive: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["sz-s", "sz-m", "sz-l", "sz-xl", "sz-xxl"],
     colors: [
       {
-        name: "Charcoal Slate",
-        hex: "#2F323A",
-        image: {
-          src: "https://picsum.photos/seed/premium-trousers-3-charcoal-slate/800/1000",
-          alt: "Premium Trousers - Charcoal Slate",
-        },
+        colorId: "col-charcoal-slate",
+        color: (await findColorById("col-charcoal-slate"))!,
+        imageId: "img-prod-003-charcoal-slate",
+        image: (await findImageById("img-prod-003-charcoal-slate"))!,
       },
       {
-        name: "Olive Drab",
-        hex: "#4B5320",
-        image: {
-          src: "https://picsum.photos/seed/premium-trousers-3-olive-drab/800/1000",
-          alt: "Premium Trousers - Olive Drab",
-        },
+        colorId: "col-olive-drab",
+        color: (await findColorById("col-olive-drab"))!,
+        imageId: "img-prod-003-olive-drab",
+        image: (await findImageById("img-prod-003-olive-drab"))!,
       },
       {
-        name: "Burgundy Wine",
-        hex: "#5E1914",
-        image: {
-          src: "https://picsum.photos/seed/premium-trousers-3-burgundy-wine/800/1000",
-          alt: "Premium Trousers - Burgundy Wine",
-        },
+        colorId: "col-burgundy-wine",
+        color: (await findColorById("col-burgundy-wine"))!,
+        imageId: "img-prod-003-burgundy-wine",
+        image: (await findImageById("img-prod-003-burgundy-wine"))!,
       },
     ],
     retailDiscount: 2,
@@ -225,7 +217,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 tops engineered with egyptian giza cotton.",
     subCategoryId: "sub-01",
     subCategory: await findSubCategoryById("sub-01"),
-    styleId: "style-04", // Casual
+    styleId: "style-04",
     style: await findStyleById("style-04"),
     gender: "male",
     description:
@@ -236,23 +228,19 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 25,
     isActive: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["sz-s", "sz-m", "sz-l", "sz-xl", "sz-xxl"],
     colors: [
       {
-        name: "Onyx Black",
-        hex: "#0F0F0F",
-        image: {
-          src: "https://picsum.photos/seed/urban-shirt-4-onyx-black/800/1000",
-          alt: "Urban Shirt - Onyx Black",
-        },
+        colorId: "col-onyx-black",
+        color: (await findColorById("col-onyx-black"))!,
+        imageId: "img-prod-004-onyx-black",
+        image: (await findImageById("img-prod-004-onyx-black"))!,
       },
       {
-        name: "Stone Gray",
-        hex: "#8E8E93",
-        image: {
-          src: "https://picsum.photos/seed/urban-shirt-4-stone-gray/800/1000",
-          alt: "Urban Shirt - Stone Gray",
-        },
+        colorId: "col-stone-gray",
+        color: (await findColorById("col-stone-gray"))!,
+        imageId: "img-prod-004-stone-gray",
+        image: (await findImageById("img-prod-004-stone-gray"))!,
       },
     ],
     retailDiscount: 0,
@@ -282,7 +270,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 one-pieces engineered with structured crepe.",
     subCategoryId: "sub-05",
     subCategory: await findSubCategoryById("sub-05"),
-    styleId: "style-06", // Luxury / Bespoke
+    styleId: "style-06",
     style: await findStyleById("style-06"),
     gender: "female",
     description:
@@ -293,31 +281,25 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 24,
     isActive: true,
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["sz-s", "sz-m", "sz-l", "sz-xl", "sz-xxl"],
     colors: [
       {
-        name: "Obsidian Black",
-        hex: "#141311",
-        image: {
-          src: "https://picsum.photos/seed/classic-dress-5-obsidian-black/800/1000",
-          alt: "Classic Dress - Obsidian Black",
-        },
+        colorId: "col-obsidian-black",
+        color: (await findColorById("col-obsidian-black"))!,
+        imageId: "img-prod-005-obsidian-black",
+        image: (await findImageById("img-prod-005-obsidian-black"))!,
       },
       {
-        name: "Champagne Gold",
-        hex: "#D4AF37",
-        image: {
-          src: "https://picsum.photos/seed/classic-dress-5-champagne-gold/800/1000",
-          alt: "Classic Dress - Champagne Gold",
-        },
+        colorId: "col-champagne-gold",
+        color: (await findColorById("col-champagne-gold"))!,
+        imageId: "img-prod-005-champagne-gold",
+        image: (await findImageById("img-prod-005-champagne-gold"))!,
       },
       {
-        name: "Ivory Cream",
-        hex: "#FAF8F5",
-        image: {
-          src: "https://picsum.photos/seed/classic-dress-5-ivory-cream/800/1000",
-          alt: "Classic Dress - Ivory Cream",
-        },
+        colorId: "col-ivory-cream",
+        color: (await findColorById("col-ivory-cream"))!,
+        imageId: "img-prod-005-ivory-cream",
+        image: (await findImageById("img-prod-005-ivory-cream"))!,
       },
     ],
     retailDiscount: 15,
@@ -349,7 +331,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 formal footwear engineered with hand-burnished calfskin leather.",
     subCategoryId: "sub-08",
     subCategory: await findSubCategoryById("sub-08"),
-    styleId: "style-03", // Formal
+    styleId: "style-03",
     style: await findStyleById("style-03"),
     gender: "female",
     description:
@@ -360,31 +342,32 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 110,
     isActive: true,
-    sizes: ["40", "41", "42", "43", "44", "45"],
+    sizes: [
+      "sz-eu-40",
+      "sz-eu-41",
+      "sz-eu-42",
+      "sz-eu-43",
+      "sz-eu-44",
+      "sz-eu-45",
+    ],
     colors: [
       {
-        name: "Midnight Navy",
-        hex: "#1B263B",
-        image: {
-          src: "https://picsum.photos/seed/urban-penny-loafers-14-midnight-navy/800/1000",
-          alt: "Urban Penny Loafers - Midnight Navy",
-        },
+        colorId: "col-midnight-navy",
+        color: (await findColorById("col-midnight-navy"))!,
+        imageId: "img-prod-006-midnight-navy",
+        image: (await findImageById("img-prod-006-midnight-navy"))!,
       },
       {
-        name: "Espresso Brown",
-        hex: "#3E2723",
-        image: {
-          src: "https://picsum.photos/seed/urban-penny-loafers-14-espresso-brown/800/1000",
-          alt: "Urban Penny Loafers - Espresso Brown",
-        },
+        colorId: "col-espresso-brown",
+        color: (await findColorById("col-espresso-brown"))!,
+        imageId: "img-prod-006-espresso-brown",
+        image: (await findImageById("img-prod-006-espresso-brown"))!,
       },
       {
-        name: "Warm Sand",
-        hex: "#D6C7B2",
-        image: {
-          src: "https://picsum.photos/seed/urban-penny-loafers-14-warm-sand/800/1000",
-          alt: "Urban Penny Loafers - Warm Sand",
-        },
+        colorId: "col-warm-sand",
+        color: (await findColorById("col-warm-sand"))!,
+        imageId: "img-prod-006-warm-sand",
+        image: (await findImageById("img-prod-006-warm-sand"))!,
       },
     ],
     retailDiscount: 0,
@@ -414,7 +397,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 casual footwear engineered with suede & technical mesh.",
     subCategoryId: "sub-07",
     subCategory: await findSubCategoryById("sub-07"),
-    styleId: "style-01", // Streetwear
+    styleId: "style-01",
     style: await findStyleById("style-01"),
     gender: "unisex",
     description:
@@ -425,31 +408,32 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: true,
     stock: 35,
     isActive: true,
-    sizes: ["40", "41", "42", "43", "44", "45"],
+    sizes: [
+      "sz-eu-40",
+      "sz-eu-41",
+      "sz-eu-42",
+      "sz-eu-43",
+      "sz-eu-44",
+      "sz-eu-45",
+    ],
     colors: [
       {
-        name: "Charcoal Slate",
-        hex: "#2F323A",
-        image: {
-          src: "https://picsum.photos/seed/classic-court-sneakers-15-charcoal-slate/800/1000",
-          alt: "Classic Court Sneakers - Charcoal Slate",
-        },
+        colorId: "col-charcoal-slate",
+        color: (await findColorById("col-charcoal-slate"))!,
+        imageId: "img-prod-007-charcoal-slate",
+        image: (await findImageById("img-prod-007-charcoal-slate"))!,
       },
       {
-        name: "Olive Drab",
-        hex: "#4B5320",
-        image: {
-          src: "https://picsum.photos/seed/classic-court-sneakers-15-olive-drab/800/1000",
-          alt: "Classic Court Sneakers - Olive Drab",
-        },
+        colorId: "col-olive-drab",
+        color: (await findColorById("col-olive-drab"))!,
+        imageId: "img-prod-007-olive-drab",
+        image: (await findImageById("img-prod-007-olive-drab"))!,
       },
       {
-        name: "Burgundy Wine",
-        hex: "#5E1914",
-        image: {
-          src: "https://picsum.photos/seed/classic-court-sneakers-15-burgundy-wine/800/1000",
-          alt: "Classic Court Sneakers - Burgundy Wine",
-        },
+        colorId: "col-burgundy-wine",
+        color: (await findColorById("col-burgundy-wine"))!,
+        imageId: "img-prod-007-burgundy-wine",
+        image: (await findImageById("img-prod-007-burgundy-wine"))!,
       },
     ],
     retailDiscount: 5,
@@ -480,7 +464,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 boots engineered with full-grain pull-up leather.",
     subCategoryId: "sub-09",
     subCategory: await findSubCategoryById("sub-09"),
-    styleId: "style-04", // Casual
+    styleId: "style-04",
     style: await findStyleById("style-04"),
     gender: "male",
     description:
@@ -491,23 +475,26 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 92,
     isActive: true,
-    sizes: ["40", "41", "42", "43", "44", "45"],
+    sizes: [
+      "sz-eu-40",
+      "sz-eu-41",
+      "sz-eu-42",
+      "sz-eu-43",
+      "sz-eu-44",
+      "sz-eu-45",
+    ],
     colors: [
       {
-        name: "Onyx Black",
-        hex: "#0F0F0F",
-        image: {
-          src: "https://picsum.photos/seed/elite-chelsea-boots-16-onyx-black/800/1000",
-          alt: "Elite Chelsea Boots - Onyx Black",
-        },
+        colorId: "col-onyx-black",
+        color: (await findColorById("col-onyx-black"))!,
+        imageId: "img-prod-008-onyx-black",
+        image: (await findImageById("img-prod-008-onyx-black"))!,
       },
       {
-        name: "Stone Gray",
-        hex: "#8E8E93",
-        image: {
-          src: "https://picsum.photos/seed/elite-chelsea-boots-16-stone-gray/800/1000",
-          alt: "Elite Chelsea Boots - Stone Gray",
-        },
+        colorId: "col-stone-gray",
+        color: (await findColorById("col-stone-gray"))!,
+        imageId: "img-prod-008-stone-gray",
+        image: (await findImageById("img-prod-008-stone-gray"))!,
       },
     ],
     retailDiscount: 0,
@@ -539,7 +526,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 sunglasses engineered with 18k gold-plated titanium & polarized glass.",
     subCategoryId: "sub-14",
     subCategory: await findSubCategoryById("sub-14"),
-    styleId: "style-06", // Luxury / Bespoke
+    styleId: "style-06",
     style: await findStyleById("style-06"),
     gender: "male",
     description:
@@ -550,23 +537,19 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: false,
     stock: 134,
     isActive: true,
-    sizes: ["52mm", "54mm", "56mm"],
+    sizes: ["sz-lens-52", "sz-lens-54", "sz-lens-56"],
     colors: [
       {
-        name: "Onyx Black",
-        hex: "#0F0F0F",
-        image: {
-          src: "https://picsum.photos/seed/signature-gold-rim-aviators-40-onyx-black/800/1000",
-          alt: "Signature Gold-Rim Aviators - Onyx Black",
-        },
+        colorId: "col-onyx-black",
+        color: (await findColorById("col-onyx-black"))!,
+        imageId: "img-prod-009-onyx-black",
+        image: (await findImageById("img-prod-009-onyx-black"))!,
       },
       {
-        name: "Stone Gray",
-        hex: "#8E8E93",
-        image: {
-          src: "https://picsum.photos/seed/signature-gold-rim-aviators-40-stone-gray/800/1000",
-          alt: "Signature Gold-Rim Aviators - Stone Gray",
-        },
+        colorId: "col-stone-gray",
+        color: (await findColorById("col-stone-gray"))!,
+        imageId: "img-prod-009-stone-gray",
+        image: (await findImageById("img-prod-009-stone-gray"))!,
       },
     ],
     retailDiscount: 9,
@@ -596,7 +579,7 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
       "Crafted for distinction \u2014 sunglasses engineered with bio-acetate & polarized lenses.",
     subCategoryId: "sub-14",
     subCategory: await findSubCategoryById("sub-14"),
-    styleId: "style-07", // Minimalist
+    styleId: "style-07",
     style: await findStyleById("style-07"),
     gender: "female",
     description:
@@ -607,31 +590,25 @@ export const productsData: Promise<ProductType[]> = Promise.resolve([
     isSale: true,
     stock: 63,
     isActive: true,
-    sizes: ["52mm", "54mm", "56mm"],
+    sizes: ["sz-lens-52", "sz-lens-54", "sz-lens-56"],
     colors: [
       {
-        name: "Obsidian Black",
-        hex: "#141311",
-        image: {
-          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-obsidian-black/800/1000",
-          alt: "Premium Tortoiseshell Wayfarers - Obsidian Black",
-        },
+        colorId: "col-obsidian-black",
+        color: (await findColorById("col-obsidian-black"))!,
+        imageId: "img-prod-010-obsidian-black",
+        image: (await findImageById("img-prod-010-obsidian-black"))!,
       },
       {
-        name: "Champagne Gold",
-        hex: "#D4AF37",
-        image: {
-          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-champagne-gold/800/1000",
-          alt: "Premium Tortoiseshell Wayfarers - Champagne Gold",
-        },
+        colorId: "col-champagne-gold",
+        color: (await findColorById("col-champagne-gold"))!,
+        imageId: "img-prod-010-champagne-gold",
+        image: (await findImageById("img-prod-010-champagne-gold"))!,
       },
       {
-        name: "Ivory Cream",
-        hex: "#FAF8F5",
-        image: {
-          src: "https://picsum.photos/seed/premium-tortoiseshell-wayfarers-41-ivory-cream/800/1000",
-          alt: "Premium Tortoiseshell Wayfarers - Ivory Cream",
-        },
+        colorId: "col-ivory-cream",
+        color: (await findColorById("col-ivory-cream"))!,
+        imageId: "img-prod-010-ivory-cream",
+        image: (await findImageById("img-prod-010-ivory-cream"))!,
       },
     ],
     retailDiscount: 0,

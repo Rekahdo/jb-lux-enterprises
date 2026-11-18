@@ -4,14 +4,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import {
+    useState,
     type ButtonHTMLAttributes,
     type ElementType,
     type ReactNode,
 } from "react";
 import { Button, buttonVariants } from "../ui/button";
 import { Download, ExternalLink, Loader } from "lucide-react";
+import { RenderType, scrollToId } from "./text";
+import { usePathname, useRouter } from "next/navigation";
 
-export const buttonImplVariants = cva("flex gap-2", {
+export const buttonImplVariants = cva("flex gap-2 leading-0!", {
     variants: {
         height: {
             sm: "h-8",
@@ -151,9 +154,7 @@ export function ButtonImpl({
             {showIcon && side === "right" && <BtnIcon />}
         </Tag>
     );
-} import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { RenderType, scrollToId, ScrollToIdType } from "./text";
+} 
 
 export interface ButtonImplGroupProps {
     className?: string;

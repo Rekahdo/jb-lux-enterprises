@@ -1,13 +1,13 @@
 import { categoryValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { SrcImageType } from "./reset";
+import { IdProp, SrcImageType } from "./reset";
 
 type ValidatorType = Infer<typeof categoryValidator>;
 
-export type CategoryType = Omit<ValidatorType, "imageId"> & {
-  id: string;
-  imageId?: SrcImageType;
-};
+export type CategoryType = Omit<ValidatorType, "imageId"> &
+  IdProp & {
+    imageId?: SrcImageType;
+  };
 
 export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   {

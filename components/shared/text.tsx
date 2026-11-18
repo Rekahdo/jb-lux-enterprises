@@ -79,12 +79,30 @@ export function scrollToId({
 
 export const textVariants = cva("", {
   variants: {
+    variant: {
+      tag: cn(
+        "leading-0! flex items-center border-background/20",
+        "border sm:border-2 dark:border-foreground/20",
+        "w-fit z-10 p-0! text-[4.5cqw] sm:text-[3.5cqw]",
+        "h-[2cqh] sm:h-[3cqh] px-[2cqw]! sm:px-[4cqw]!",
+        "rounded-[2cqi]"
+      ),
+    },
     tag: {
-      outline: cn("leading-0! flex items-center",
-        "rounded-md bg-foreground/60 text-primary border sm:border-2 border-background/20",
-        "dark:border-foreground/20 dark:bg-background/60",
-        // "supports-backdrop-filter:bg-foreground/10 dark:supports-backdrop-filter:bg-background/10"
-      )
+      outline: cn(
+        "bg-foreground/60 text-primary",
+        "dark:bg-background/60",
+      ),
+      background: cn(
+        "bg-foreground/60 text-primary",
+        "dark:bg-background/60",
+      ),
+      primary: cn(
+        "bg-primary/90 text-primary-foreground",
+      ),
+      destructive: cn(
+        "bg-destructive text-destructive-foreground",
+      ),
     },
     size: {
       hero: "text-3xl sm:text-5xl md:text-6xl",

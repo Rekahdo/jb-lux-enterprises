@@ -1,57 +1,65 @@
 import { ordersValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { statusData, StatusType } from "./stats";
-import { AddressPropType, HrefFile, PhonePropType } from "./reset";
-import { AddressType, findAddressById } from "./address";
-import { findPhoneById, PhoneType } from "./phone";
+import { findStatusById, StatusType } from "./stats";
+import { IdProp, HrefFile, PhoneProps, AddressProps } from "./reset";
+import { findAddressById } from "./address";
+import { findPhoneById } from "./phone";
 
 type ValidatorType = Infer<typeof ordersValidator>;
 
 type ItemsType = ValidatorType["items"][number];
 
-type PromiseType = Omit<
+export type OrderItemType = Omit<ItemsType, "productId" | "size" | "color"> & {
+  productId: string;
+  size: string;
+  color: string;
+};
+
+export type OrderType = Omit<
   ValidatorType,
   "bankReceipt" | "items" | "addressId" | "phoneId" | "statusId"
 > &
-  AddressPropType &
-  PhonePropType & {
-    id: string;
+  IdProp &
+  AddressProps &
+  PhoneProps & {
     bankReceipt: HrefFile;
-    items: (Omit<ItemsType, "productId"> & { productId: string })[];
-    statusId: StatusType;
+    items: OrderItemType[];
+    statusId: string;
+    status: StatusType | undefined;
   };
 
-const statsData = await statusData;
-
-export const ordersData: Promise<PromiseType[]> = Promise.resolve([
-  // --- RICHARD'S ORDERS ---
-  {
-    id: "order-001",
-    userId: "user_richard_okafor",
-    firstName: "Richard",
-    lastName: "Okafor",
-    email: "okaforrichard76@gmail.com",
-    phoneId: "phn-02",
-    phone: await findPhoneById("phn-02"),
-    addressId: "add-02",
-    address: await findAddressById("add-02"),
-    bankReceipt: {
-      href: "/doc/Bank Transfer Receipt.pdf",
-      name: "bank_receipt_oct_24.pdf",
-      type: "bank-receipt",
-    },
-    items: [
-      {
-        productId: "prod-001",
-        discountPercentage: 18,
-        size: "L",
-        color: "Jet Black with Gold Hardware",
-        quantity: 5,
-        priceAtPurchase: 69700,
+export const ordersData: Promise<OrderType[]> = (async () => {
+  return [
+    // --- RICHARD'S ORDERS ---
+    {
+      id: "order-001",
+      userId: "user_richard_okafor",
+      firstName: "Richard",
+      lastName: "Okafor",
+      email: "okaforrichard76@gmail.com",
+      phoneId: "phn-02",
+      phone: await findPhoneById("phn-02"),
+      addressId: "add-02",
+      address: await findAddressById("add-02"),
+      bankReceipt: {
+        href: "/doc/Bank Transfer Receipt.pdf",
+        name: "bank_receipt_oct_24.pdf",
+        type: "bank-receipt",
       },
-    ],
-    totalAmount: 348500,
-    notes: "Please pack in a single luxury box if possible.",
-    statusId: statsData.pending,
-  },
-]);
+      items: [
+        {
+          productId: "prod_001",
+          discountPercentage: 18,
+          size: "sz-l",
+          color: "col-jet-black",
+          quantity: 5,
+          priceAtPurchase: 69700,
+        },
+      ],
+      totalAmount: 348500,
+      notes: "Please pack in a single luxury box if possible.",
+      statusId: "stat-pending",
+      status: await findStatusById("stat-pending"),
+    },
+  ];
+})();
