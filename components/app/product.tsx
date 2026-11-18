@@ -3,10 +3,10 @@ import { cn } from "cn";
 import { FadeOverlay } from "../shared/fade-overlay";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import Image from "next/image";
-import Text from "../shared/text";
+import Text, { TextProps } from "../shared/text";
 import { STOREFRONT_ROUTE } from "@/lib/routes";
 import { useRouter } from "next/navigation";
-import { Star } from "lucide-react";
+import { ShoppingCartPlus, Star } from "lucide-react";
 import { calculateRating } from "@/lib/rating";
 import { convertCurrency } from "@/app/action/currency";
 import { convertCent } from "@/lib/current";
@@ -20,7 +20,7 @@ export interface ProductProps {
     isWholesale?: boolean;
 }
 
-export default function Product({ as, product, isWholesale }: ProductProps) {
+export default function Product({ as, product, isWholesale = true }: ProductProps) {
     if (!product) return null;
 
     const router = useRouter();
@@ -29,7 +29,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
     const isPopular = as === "popular";
     const isFeatured = as === "featured";
 
-    const { badge, colors, name, wholesaleTiers, unitPrice, retailDiscount } = product;
+    const { badge, colors, name, wholesaleTiers, unitPrice, retailDiscount, isSale } = product;
 
     const retailPrice = convertCent({ amountInCents: unitPrice, currency: "NGN", discount: retailDiscount });
     const wholesalePrice = wholesaleTiers ? convertCent({ amountInCents: unitPrice, currency: "NGN", discount: wholesaleTiers[0].discountPercentage }) : undefined;
@@ -41,7 +41,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                 isDefault ? () => router.push(STOREFRONT_ROUTE) : undefined
             }
             className={cn(
-                "@container p-0! gap-0! group/product hover:shadow-sm",
+                "@container p-0! gap-0! group/product hover:shadow-2xl",
                 isDefault && "relative min-w-60 sm:min-w-60 hover:cursor-pointer",
             )}
         >
@@ -65,31 +65,39 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                     )}
                 />
 
-                {badge && (
-                    <Tag value={badge} top="top-[5cqi]" left="left-[5cqi]" />
+                {(isSale || badge || (isFeatured && wholesaleTiers && isWholesale)) && (
+                    <div className="absolute top-[5cqi] left-[5cqi] flex flex-col gap-[2cqi]">
+                        {(isPopular && isSale) && (
+                            <ProductTag value={"sale"} tag={'destructive'} />
+                        )}
+
+                        {badge && (
+                            <ProductTag value={badge} />
+                        )}
+
+                        {(isFeatured && wholesaleTiers && isWholesale) && (
+                            <ProductTag value={`Wholesale tier - ${wholesalePrice?.discount}%`} tag={'primary'} />
+                        )}
+                    </div>
                 )}
 
-                {(isFeatured && wholesaleTiers && isWholesale) && (
-                    <Tag value={`Wholesale tier - ${wholesaleTiers[0].discountPercentage}%`}
-                        top="top-[17cqi]" left="left-[5cqi]" primary />
-                )}
             </CardHeader>
 
             <CardContent
                 className={cn(
-                    "z-10 p-[6cqi] flex flex-col gap-[1cqh]",
+                    "z-10 p-[6cqi] flex flex-col gap-[1cqh] sm:gap-[1.5cqh]",
                     isDefault && "absolute bottom-0 text-white",
                 )}
             >
-                <ContentTop product={product} isFeatured={isFeatured} isPopular={isPopular} />
-                <TitleDescription product={product} isPopular={isPopular} />
-                {isFeatured && <ContentRating product={product} />}
+                <ProductContentTop product={product} isFeatured={isFeatured} isPopular={isPopular} />
+                <ProductTitleDescription product={product} isPopular={isPopular} />
+                {isFeatured && <ProductContentRating product={product} />}
             </CardContent>
 
             <CardFooter className="mx-[6cqi] bg-transparent p-0 py-[6cqi]">
-                {isFeatured &&
-                    <div className="flex justify-between items-center w-full">
-                        <div>
+                <div className="flex justify-between items-center w-full">
+                    <div>
+                        <div className="flex gap-[4cqw]">
                             <Text
                                 value={retailDiscount !== 0 ? retailPrice.unitPrice : "Retail"}
                                 className={cn("text-[5cqi] sm:text-[3.5cqi] opacity-50",
@@ -102,25 +110,54 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                                 number
                             />
 
-                            <Text
-                                value={retailPrice.discountPrice}
-                                className="text-[7cqi] sm:text-[5cqi]"
-                                weight={'semibold'}
-                                font={'mono'}
-                                tracking={'wider'}
-                                number
-                            />
+                            {retailDiscount !== 0 && (
+                                <Text
+                                    value={`${retailPrice.discount}%-off`}
+                                    className={cn(
+                                        "text-[5cqi] sm:text-[3.5cqi] opacity-50",
+                                    )}
+                                    weight={'medium'}
+                                    font={'mono'}
+                                    color={'gray'}
+                                    tracking={'wider'}
+                                    number
+                                />
+                            )}
+
                         </div>
 
+                        <Text
+                            value={retailPrice.discountPrice}
+                            className="text-[7cqi] sm:text-[5cqi]"
+                            weight={'semibold'}
+                            font={'mono'}
+                            tracking={'wider'}
+                            number
+                        />
+                    </div>
+
+                    {isPopular &&
+                        <ButtonImpl
+                            icon={<ShoppingCartPlus size={2} />}
+                            text={"Add"}
+                            showTextAt="sm"
+                            className={cn("p-0! rounded-[2cqi] flex items-center",
+                                "text-[5cqi] sm:text-[4cqi] px-[6cqi]! h-[14cqi] sm:h-[12cqi]",
+                                "[&_svg]:size-[6cqi]!",
+                            )}
+                        />
+                    }
+
+                    {isFeatured &&
                         <ButtonImpl
                             text={"View"}
                             variant={'outline'}
-                            className={cn(" rounded-[2cqi]",
+                            className={cn("p-0! rounded-[2cqi] flex items-center",
                                 "text-[5cqi] sm:text-[4cqi] px-[6cqi]! h-[14cqi] sm:h-[12cqi]",
                             )}
                         />
-                    </div>
-                }
+                    }
+                </div>
 
 
             </CardFooter>
@@ -143,42 +180,25 @@ type ContentType = {
     isPopular?: boolean;
 }
 
-function Tag({
-    top,
-    bottom,
-    right,
-    left,
-    primary = false,
+export function ProductTag({
     value,
-}: Omit<ContentType, "product"> & {
-    value: string,
-    top?: string,
-    bottom?: string,
-    left?: string,
-    right?: string,
-    primary?: boolean,
-}) {
+    className,
+    ...props
+}: TextProps) {
     return (
         <Text
             tracking="wider"
             weight="semibold"
             value={value}
-            tag="outline"
+            variant={'tag'}
+            tag="background"
             casing={'upper'}
-            className={cn(
-                "w-fit absolute z-10 p-0! rounded-[2cqi]",
-                "inset-x-0", top, bottom, left, right,
-                "h-[2cqh] sm:h-[3cqh] px-[4cqw]! sm:px-[6cqw]!",
-                "text-[4cqw] sm:text-[3.5cqw]",
-                primary && cn(
-                    "bg-primary! text-primary-foreground",
-                ),
-            )}
+            {...props}
         />
     )
 }
 
-function ContentRating({ product }: ContentType) {
+function ProductContentRating({ product }: ContentType) {
 
     const { rating, gender } = product;
     const rate = calculateRating(rating)
@@ -222,13 +242,13 @@ function ContentRating({ product }: ContentType) {
     )
 }
 
-function ContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
+function ProductContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
 
     const { style, stock } = product;
 
     return <>
         {isPopular &&
-            <ContentRating product={product} />
+            <ProductContentRating product={product} />
         }
 
         {isFeatured && <div className="flex justify-between items-end">
@@ -254,7 +274,7 @@ function ContentTop({ product, isFeatured = false, isPopular = false }: ContentT
     </>;
 }
 
-function TitleDescription({ product, isPopular = false }: ContentType) {
+function ProductTitleDescription({ product, isPopular = false }: ContentType) {
 
     const { name, description } = product;
 
@@ -268,7 +288,7 @@ function TitleDescription({ product, isPopular = false }: ContentType) {
                 tracking={'wide'}
                 weight={'semibold'}
                 wrap={false}
-                className="text-[6cqi]! sm:text-[5cqi]!"
+                className="text-[7cqi]! sm:text-[5cqi]!"
             />
 
             <Text
@@ -278,7 +298,7 @@ function TitleDescription({ product, isPopular = false }: ContentType) {
                 weight={'light'}
                 font={'mono'}
                 wrap={isPopular}
-                className="text-[5cqw] sm:text-[4cqw] line-clamp-3 leading-[8cqi] sm:leading-[7cqi]"
+                className="text-[6cqw] sm:text-[4cqw] line-clamp-3 leading-[8cqi] sm:leading-[7cqi]"
             />
         </div>
     )

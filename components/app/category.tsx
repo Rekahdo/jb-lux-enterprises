@@ -7,6 +7,7 @@ import { STOREFRONT_ROUTE } from "@/lib/routes";
 import { H3 } from "../shared/headings";
 import { useRouter } from "next/navigation";
 import { CategoryType } from "@/data/categories";
+import { ProductTag } from "./product";
 
 export function Category({ category }: { category: CategoryType }) {
     if (!category) return null;
@@ -36,18 +37,9 @@ export function Category({ category }: { category: CategoryType }) {
                     )}
                 />
 
-                <Text
-                    tracking="wider"
-                    weight="semibold"
-                    value={badge}
-                    tag="outline"
-                    className={cn(
-                        "w-fit absolute z-10 p-0!",
-                        "inset-x-0 top-[10cqi] left-[10cqi]",
-                        "pb-[1.5cqh]! pt-[1.6cqh]! sm:py-[1.5cqh]! px-[6cqw]! sm:px-[8cqw]! border-[0.5cqi]",
-                        "text-[4cqw] sm:text-[3.5cqw]",
-                    )}
-                />
+                <div className="absolute top-[5cqi] left-[5cqi] flex flex-col gap-[2cqi]">
+                    <ProductTag value={badge} />
+                </div>
             </CardHeader>
 
             <CardContent className="z-10 p-0 absolute bottom-0 text-white">

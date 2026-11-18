@@ -1,11 +1,10 @@
 import { addressValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
+import { IdProp } from "./reset";
 
 type ValidatorType = Infer<typeof addressValidator>;
 
-export type AddressType = ValidatorType & {
-  id: string;
-};
+export type AddressType = ValidatorType & IdProp;
 
 export const addressData: Promise<AddressType[]> = Promise.resolve([
   {
@@ -32,6 +31,8 @@ export const addressData: Promise<AddressType[]> = Promise.resolve([
   },
 ]);
 
-export async function findAddressById(id: string): Promise<AddressType | undefined> {
+export async function findAddressById(
+  id: string,
+): Promise<AddressType | undefined> {
   return Promise.resolve((await addressData).find((each) => each.id === id));
 }

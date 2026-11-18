@@ -1,10 +1,10 @@
 import { styleValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
+import { IdProp } from "./reset";
 
 type ValidatorType = Infer<typeof styleValidator>;
 
-export type StyleType = Omit<ValidatorType, "isActive"> & {
-  id: string;
+export type StyleType = Omit<ValidatorType, "isActive"> & IdProp &  {
   isActive?: boolean;
 };
 

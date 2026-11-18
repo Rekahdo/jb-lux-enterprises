@@ -1,11 +1,11 @@
 import { subCategoryValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { CategoryType, findCategoryById } from "./categories";
+import { IdProp } from "./reset";
 
 type ValidatorType = Infer<typeof subCategoryValidator>;
 
-export type SubCategoryType = Omit<ValidatorType, "categoryId"> & {
-  id: string;
+export type SubCategoryType = Omit<ValidatorType, "categoryId"> & IdProp & {
   categoryId: string;
   category: CategoryType | undefined;
 };

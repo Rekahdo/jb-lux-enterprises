@@ -132,8 +132,23 @@ export const featuredTable = {
 };
 export const featuredValidator = v.object(featuredTable);
 
+export const colorTable = {
+  name: v.string(),
+  hex: v.string(),
+};
+export const colorValidator = v.object(colorTable);
+
+export const sizesTable = {
+  size: v.string(),
+  name: v.string(),
+  categoryId: v.id("categories"),
+};
+export const sizesValidator = v.object(sizesTable);
+
 export const popularTable = {
   productId: v.id("products"),
+  color: v.id("colors"),
+  size: v.string(),
 };
 export const popularValidator = v.object(popularTable);
 
@@ -177,11 +192,10 @@ export const productsTable = {
   isSale: v.optional(v.boolean()),
   stock: v.number(),
   isActive: v.boolean(),
-  sizes: v.array(v.string()),
+  sizes: v.array(v.id("sizes")),
   colors: v.array(
     v.object({
-      name: v.string(),
-      hex: v.string(),
+      colorId: v.id("colors"),
       imageId: v.id("images"),
     }),
   ),
@@ -249,8 +263,8 @@ export const ordersTable = {
     v.object({
       productId: v.id("products"),
       discountPercentage: v.number(),
-      size: v.string(),
-      color: v.string(),
+      size: v.id("sizes"),
+      color: v.id("colors"),
       quantity: v.number(),
       priceAtPurchase: v.number(),
     }),
@@ -330,6 +344,9 @@ export default defineSchema({
   storeFeatures: defineTable(storeFeaturesTable),
 
   visitStore: defineTable(visitStoreTable),
+
+  sizes: defineTable(sizesTable),
+  colors: defineTable(colorTable),
 
   categories: defineTable(categoryTable).index("by_slug", ["slug"]),
 
