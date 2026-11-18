@@ -28,7 +28,7 @@ export function Category({ category }: { category: CategoryType }) {
                     src={image?.src ?? "/image/jacket.jpg"}
                     alt={image?.alt ?? title}
                     fill
-                    sizes="(max-width: 768px) 10vw, 400px"
+                    sizes="(max-width: 768px) 100vw, 400px"
                     className={cn(
                         "object-cover object-top scale-101",
                         "group-hover/product-category:scale-110 group-active/product-category:scale-100",
