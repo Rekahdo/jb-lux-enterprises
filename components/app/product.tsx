@@ -81,8 +81,8 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                     isDefault && "absolute bottom-0 text-white",
                 )}
             >
-                <Content1 product={product} isFeatured={isFeatured} isPopular={isPopular} />
-                <Content2 product={product} isPopular={isPopular} />
+                <ContentTop product={product} isFeatured={isFeatured} isPopular={isPopular} />
+                <TitleDescription product={product} isPopular={isPopular} />
                 <Content3 product={product} isFeatured={isFeatured} />
             </CardContent>
 
@@ -178,7 +178,7 @@ function Tag({
     )
 }
 
-function Content1({ product, isFeatured = false, isPopular = false }: ContentType) {
+function ContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
 
     const { style, stock, rating, gender } = product;
     const rate = calculateRating(rating)
@@ -245,7 +245,7 @@ function Content1({ product, isFeatured = false, isPopular = false }: ContentTyp
     </>;
 }
 
-function Content2({ product, isPopular = false }: ContentType) {
+function TitleDescription({ product, isPopular = false }: ContentType) {
 
     const { name, description } = product;
 
@@ -269,7 +269,7 @@ function Content2({ product, isPopular = false }: ContentType) {
                 weight={'light'}
                 font={'mono'}
                 wrap={isPopular}
-                className="text-[5cqw] sm:text-[4cqw] line-clamp-3 leading-[7cqi]"
+                className="text-[5cqw] sm:text-[4cqw] line-clamp-3 leading-[8cqi] sm:leading-[7cqi]"
             />
         </div>
     )
