@@ -88,11 +88,13 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
 
             <CardFooter className="mx-[6cqi] bg-transparent p-0 py-[6cqi]">
                 {isFeatured &&
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between items-center w-full">
                         <div>
                             <Text
                                 value={retailDiscount !== 0 ? retailPrice.unitPrice : "Retail"}
-                                className={cn("text-[3.5cqi] opacity-50", retailDiscount !== 0 && "line-through")}
+                                className={cn("text-[5cqi] sm:text-[3.5cqi] opacity-50", 
+                                    retailDiscount !== 0 && "line-through"
+                                )}
                                 weight={'medium'}
                                 font={'mono'}
                                 color={'gray'}
@@ -102,7 +104,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
 
                             <Text
                                 value={retailPrice.discountPrice}
-                                className="text-[5cqi]"
+                                className="text-[7cqi] sm:text-[5cqi]"
                                 weight={'medium'}
                                 font={'mono'}
                                 tracking={'wider'}
@@ -113,7 +115,9 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                         <ButtonImpl
                             text={"View"}
                             variant={'outline'}
-                            className={"text-[4cqi] px-[6cqi]! h-[12cqi] rounded-[2cqi]"}
+                            className={cn(" rounded-[2cqi]",
+                                "text-[5cqi] sm:text-[4cqi] px-[6cqi]! h-[14cqi] sm:h-[12cqi]",
+                            )}
                         />
                     </div>
                 }
@@ -176,46 +180,47 @@ function Tag({
 
 function Content1({ product, isFeatured = false, isPopular = false }: ContentType) {
 
-    const { badge, colors, name, style, stock, rating, gender } = product;
+    const { style, stock, rating, gender } = product;
     const rate = calculateRating(rating)
 
     return <>
-        {isPopular && <div className="flex items-end gap-[6cqw]">
-            <div className="flex items-center gap-[2cqw]">
-                <Star className="size-[5cqw] text-primary fill-primary" />
+        {isPopular &&
+            <div className="flex items-end gap-[6cqw]">
+                <div className="flex items-start gap-[2cqw]">
+                    <Star className="size-[6cqw] sm:size-[5cqw] text-primary fill-primary" />
+
+                    <Text
+                        value={rate.average}
+                        casing={'upper'}
+                        color={'gray'}
+                        weight={'extrabold'}
+                        tracking={'tighter'}
+                        font={'mono'}
+                        className="text-[5cqw] sm:text-[3.5cqw]"
+                    />
+
+                    <Text
+                        value={`(${rate.total})`}
+                        casing={'upper'}
+                        color={'gray'}
+                        tracking={'tighter'}
+                        weight={'light'}
+                        font={'mono'}
+                        className="text-[5cqw] sm:text-[3.5cqw]"
+                    />
+                </div>
 
                 <Text
-                    value={rate.average}
-                    casing={'upper'}
+                    value={gender}
+                    casing={'capitalize'}
                     color={'gray'}
-                    weight={'extrabold'}
-                    tracking={'tighter'}
+                    weight={'medium'}
+                    tracking={'widest'}
                     font={'mono'}
-                    number
-                    className="text-[3.5cqw]"
-                />
-
-                <Text
-                    value={`(${rate.total})`}
-                    casing={'upper'}
-                    color={'gray'}
-                    tracking={'tighter'}
-                    weight={'light'}
-                    font={'mono'}
-                    className="text-[3.5cqw] "
+                    className="text-[5cqw] sm:text-[3.5cqw]"
                 />
             </div>
-
-            <Text
-                value={gender}
-                casing={'capitalize'}
-                color={'gray'}
-                weight={'medium'}
-                tracking={'widest'}
-                font={'mono'}
-                className="text-[3.5cqw]"
-            />
-        </div>}
+        }
 
         {isFeatured && <div className="flex justify-between items-end">
             <Text
@@ -224,7 +229,7 @@ function Content1({ product, isFeatured = false, isPopular = false }: ContentTyp
                 color={'gray'}
                 weight={'light'}
                 tracking={'wider'}
-                className="text-[3.2cqw]"
+                className="text-[4.5cqw] sm:text-[3.2cqw]"
             />
 
             <Text
@@ -234,7 +239,7 @@ function Content1({ product, isFeatured = false, isPopular = false }: ContentTyp
                 weight={'medium'}
                 tracking={'widest'}
                 font={'mono'}
-                className="text-[3cqw]"
+                className="text-[4cqw] sm:text-[3cqw]"
             />
         </div>}
     </>;
@@ -254,7 +259,7 @@ function Content2({ product, isPopular = false }: ContentType) {
                 tracking={'wide'}
                 weight={'semibold'}
                 wrap={false}
-                className="text-[5cqi]!"
+                className="text-[6cqi]! sm:text-[5cqi]!"
             />
 
             <Text
@@ -264,7 +269,7 @@ function Content2({ product, isPopular = false }: ContentType) {
                 weight={'light'}
                 font={'mono'}
                 wrap={isPopular}
-                className="text-[4cqw] line-clamp-3 leading-[7cqi]"
+                className="text-[5cqw] sm:text-[4cqw] line-clamp-3 leading-[7cqi]"
             />
         </div>
     )
@@ -276,40 +281,42 @@ function Content3({ product, isFeatured = false }: ContentType) {
     const rate = calculateRating(rating)
 
     return <>
-        {isFeatured && <div className="flex items-end gap-[6cqw]">
-            <div className="flex items-center gap-[2cqw]">
-                <Star className="size-[5cqw] text-primary fill-primary" />
+        {isFeatured &&
+            <div className="flex items-end gap-[6cqw]">
+                <div className="flex items-start gap-[2cqw]">
+                    <Star className="size-[6cqw] sm:size-[5cqw] text-primary fill-primary" />
+
+                    <Text
+                        value={rate.average}
+                        casing={'upper'}
+                        color={'gray'}
+                        weight={'extrabold'}
+                        tracking={'tighter'}
+                        font={'mono'}
+                        className="text-[5cqw] sm:text-[3.5cqw]"
+                    />
+
+                    <Text
+                        value={`(${rate.total})`}
+                        casing={'upper'}
+                        color={'gray'}
+                        tracking={'tighter'}
+                        weight={'light'}
+                        font={'mono'}
+                        className="text-[5cqw] sm:text-[3.5cqw]"
+                    />
+                </div>
 
                 <Text
-                    value={rate.average}
-                    casing={'upper'}
+                    value={gender}
+                    casing={'capitalize'}
                     color={'gray'}
-                    weight={'extrabold'}
-                    tracking={'tighter'}
+                    weight={'medium'}
+                    tracking={'widest'}
                     font={'mono'}
-                    className="text-[3.5cqw] tabular-nums"
-                />
-
-                <Text
-                    value={`(${rate.total})`}
-                    casing={'upper'}
-                    color={'gray'}
-                    tracking={'tighter'}
-                    weight={'light'}
-                    font={'mono'}
-                    className="text-[3.5cqw] "
+                    className="text-[5cqw] sm:text-[3.5cqw]"
                 />
             </div>
-
-            <Text
-                value={gender}
-                casing={'capitalize'}
-                color={'gray'}
-                weight={'medium'}
-                tracking={'widest'}
-                font={'mono'}
-                className="text-[3.5cqw]"
-            />
-        </div>}
+        }
     </>;
 }
