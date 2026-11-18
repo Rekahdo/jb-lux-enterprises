@@ -3,12 +3,12 @@ import { Infer } from "convex/values";
 
 type ValidatorType = Infer<typeof styleValidator>;
 
-type PromiseType = Omit<ValidatorType, "isActive"> & {
+export type StyleType = Omit<ValidatorType, "isActive"> & {
   id: string;
-  isActive?: boolean; // Optional for mock data, defaults to true
+  isActive?: boolean;
 };
 
-export const stylesData: Promise<PromiseType[]> = Promise.resolve([
+export const stylesData: Promise<StyleType[]> = Promise.resolve([
   {
     id: "style-01",
     name: "Streetwear",
@@ -50,3 +50,9 @@ export const stylesData: Promise<PromiseType[]> = Promise.resolve([
     isActive: false,
   },
 ]);
+
+export async function findStyleById(
+  id: string,
+): Promise<StyleType | undefined> {
+  return Promise.resolve((await stylesData).find((each) => each.id === id));
+}

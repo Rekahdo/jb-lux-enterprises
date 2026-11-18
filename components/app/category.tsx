@@ -12,14 +12,14 @@ export function Category({ category }: { category: CategoryType }) {
     if (!category) return null;
 
     const router = useRouter();
-    const { tag, title, description, count, imageId: image } = category;
+    const { badge, title, description, count, imageId: image } = category;
 
     return (
         <Card
             data-slot="product-category"
             onClick={() => router.push(STOREFRONT_ROUTE)}
             className={cn(
-                "@container p-0! gap-0! aspect-2/2.5 group/product-category shadow-sm md:shadow-md lg:shadow-lg",
+                "@container p-0! gap-0! aspect-2/2.5 group/product-category shadow-sm",
                 "relative min-w-60 sm:min-w-60 hover:cursor-pointer",
             )}
         >
@@ -28,19 +28,19 @@ export function Category({ category }: { category: CategoryType }) {
                     src={image?.src ?? "/image/jacket.jpg"}
                     alt={image?.alt ?? title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 340px"
+                    sizes="(max-width: 768px) 10vw, 400px"
                     className={cn(
                         "object-cover object-top scale-101",
                         "group-hover/product-category:scale-110 group-active/product-category:scale-100",
-                        "transition-all duration-500 ease-in-out",
+                        "transition-transform duration-500 ease-in-out",
                     )}
                 />
 
                 <Text
                     tracking="wider"
                     weight="semibold"
-                    value={tag}
-                    variant="outline"
+                    value={badge}
+                    tag="outline"
                     className={cn(
                         "w-fit absolute z-10 p-0!",
                         "inset-x-0 top-[10cqi] left-[10cqi]",
@@ -58,10 +58,11 @@ export function Category({ category }: { category: CategoryType }) {
                         color="white"
                         className="group-hover/product-category:text-primary text-[12cqw]!"
                     />
+
                     <Text
                         tracking="wider"
                         value={description}
-                        color="gray"
+                        color="lightgray"
                         className="text-[5cqw]!"
                     />
                 </div>

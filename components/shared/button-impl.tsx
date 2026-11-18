@@ -28,17 +28,6 @@ export const buttonImplVariants = cva("flex gap-2", {
     },
 });
 
-type PageType = { type: "page"; href: string };
-type ScrollType = {
-    type: "scroll";
-    id: string;
-    href?: ScrollToIdType["destinationPath"]
-};
-type DownloadType = { type: "download"; href: string; filename: string };
-type ExternalType = { type: "external"; href: string };
-
-type RenderType = PageType | ScrollType | DownloadType | ExternalType;
-
 export type ButtonVariantProps = VariantProps<typeof buttonVariants> &
     VariantProps<typeof buttonImplVariants>;
 
@@ -98,19 +87,19 @@ export function ButtonImpl({
     let tagProps: Record<string, unknown> = { type, onClick };
 
     const scroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (render && render.type === "scroll") {
+        if (render && render.as === "scroll") {
             scrollToId({ id: render.id, currentPath: pathname, destinationPath: (render.href ?? pathname), e, router });
         }
     };
 
     if (render) {
-        if (render.type === "page") {
+        if (render.as === "page") {
             Tag = Link;
             tagProps = { href: render.href, type: undefined, onClick };
-        } else if (render.type === "scroll") {
+        } else if (render.as === "scroll") {
             Tag = "a";
             tagProps = { type: undefined, onClick: scroll };
-        } else if (render.type === "download") {
+        } else if (render.as === "download") {
             Tag = "a";
             tagProps = {
                 href: render.href,
@@ -118,7 +107,7 @@ export function ButtonImpl({
                 type: undefined,
                 onClick,
             };
-        } else if (render.type === "external") {
+        } else if (render.as === "external") {
             Tag = Link;
             tagProps = {
                 href: render.href,
@@ -164,7 +153,7 @@ export function ButtonImpl({
     );
 } import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { scrollToId, ScrollToIdType } from "./text";
+import { RenderType, scrollToId, ScrollToIdType } from "./text";
 
 export interface ButtonImplGroupProps {
     className?: string;
@@ -198,11 +187,11 @@ export default function ButtonImplGroup({ className, buttons, isPending }: Butto
 }
 
 export function PageBtn(props: ButtonImplProps & { href: string }) {
-    return <ButtonImpl {...props} render={{ type: "page", href: props.href }} />;
+    return <ButtonImpl {...props} render={{ as: "page", href: props.href }} />;
 }
 
 export function ScrollBtn({ id, href, ...props }: ButtonImplProps & { id: string, href?: string }) {
-    return <ButtonImpl {...props} render={{ type: "scroll", id, href: href }} />;
+    return <ButtonImpl {...props} render={{ as: "scroll", id, href: href }} />;
 }
 
 export function DownloadBtn({ href, filename, ...props }:
@@ -211,7 +200,7 @@ export function DownloadBtn({ href, filename, ...props }:
         <ButtonImpl
             {...props}
             icon={<Download />}
-            render={{ type: "download", href, filename }}
+            render={{ as: "download", href, filename }}
         />
     );
 }
@@ -269,7 +258,7 @@ export function ExternalBtn({ href, showTextAt = "sm", ...props }:
             {...props}
             showTextAt={showTextAt}
             icon={<ExternalLink />}
-            render={{ type: "external", href }}
+            render={{ as: "external", href }}
         />
     );
 }

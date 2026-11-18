@@ -13,15 +13,16 @@ type PromiseType = Omit<ValidatorType, "addressId" | "phoneId"> &
 
 export const storeSettingsData: Promise<PromiseType> = Promise.resolve({
   brandName: "JB Lux Enterprises",
+  currentUnit: "NGN",
   year: "2026",
   bankName: "Opay",
   accountName: "Okafor Richard Tochukwu",
   accountNumber: "9059405621",
   email: "realjblux@gmail.com",
   retail: true,
-  retailDiscount: 0,
+  retailDiscount: 20,
   wholesale: true,
-  wholesaleDiscount: 0,
+  wholesaleDiscount: 45,
   phoneId: "phn-01",
   phone: await findPhoneById("phn-01"),
   addressId: "add-01",

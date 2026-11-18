@@ -1,3 +1,6 @@
+import { ratingValidator } from "@/convex/schema";
+import { Infer } from "convex/values";
+
 export { cn } from "cn";
 
 export function windowTheme(): MediaQueryList | null {

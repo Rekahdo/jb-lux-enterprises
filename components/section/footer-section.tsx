@@ -128,7 +128,7 @@ export default async function FooterSection(props: FooterSectionProps) {
                                     size={textsizeXS}
                                     value={service.service}
                                     render={{
-                                        type: "page",
+                                        as: "page",
                                         href: service.href,
                                     }}
                                 />
@@ -143,11 +143,11 @@ export default async function FooterSection(props: FooterSectionProps) {
                     content={
                         <>
                             <Text size={textsizeXS} value={"Terms of use"} render={{
-                                type: "page", href: TERMS_ROUTE,
+                                as: "page", href: TERMS_ROUTE,
                             }} />
 
                             <Text size={textsizeXS} value={"Privacy Policy"} render={{
-                                type: "page", href: POLICY_ROUTE,
+                                as: "page", href: POLICY_ROUTE,
                             }} />
                         </>
                     }

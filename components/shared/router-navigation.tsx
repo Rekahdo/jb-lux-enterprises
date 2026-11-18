@@ -48,7 +48,7 @@ export function HomeRoute(props: RouteProps) {
       icon={<Home />}
       text={props.text ?? "Home"}
       render={{
-        type: "page",
+        as: "page",
         href: HOME_ROUTE,
       }}
       {...props}
@@ -63,7 +63,7 @@ export function AuthRoute(props: RouteProps) {
       text={props.text ?? "Auth"}
       variant={"ghost"}
       render={{
-        type: "page",
+        as: "page",
         href: AUTH_ROUTE,
       }}
       {...props}

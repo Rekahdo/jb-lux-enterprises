@@ -1,29 +1,38 @@
 import { ProductType } from "@/data/products";
 import { cn } from "cn";
 import { FadeOverlay } from "../shared/fade-overlay";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import Image from "next/image";
 import Text from "../shared/text";
 import { STOREFRONT_ROUTE } from "@/lib/routes";
 import { useRouter } from "next/navigation";
+import { Star } from "lucide-react";
+import { calculateRating } from "@/lib/rating";
+import { convertCurrency } from "@/app/action/currency";
+import { convertCent } from "@/lib/current";
+import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
+import { ButtonImpl } from "../shared/button-impl";
 
 export interface ProductProps {
     as: "default" | "popular" | "featured";
     product: ProductType;
+    isWholesale?: boolean;
 }
 
-export default function Product({ as, product }: ProductProps) {
+export default function Product({ as, product, isWholesale }: ProductProps) {
     if (!product) return null;
-    
+
     const router = useRouter();
 
     const isDefault = as === "default";
     const isPopular = as === "popular";
     const isFeatured = as === "featured";
 
-    const { badge, tagline, colors, name } = product;
+    const { badge, colors, name, wholesaleTiers, unitPrice, retailDiscount } = product;
 
-    const primaryImage = colors[0]?.image;
+    const retailPrice = convertCent({ amountInCents: unitPrice, currency: "NGN", discount: retailDiscount });
+    const wholesalePrice = wholesaleTiers ? convertCent({ amountInCents: unitPrice, currency: "NGN", discount: wholesaleTiers[0].discountPercentage }) : undefined;
 
     return (
         <Card
@@ -32,7 +41,7 @@ export default function Product({ as, product }: ProductProps) {
                 isDefault ? () => router.push(STOREFRONT_ROUTE) : undefined
             }
             className={cn(
-                "@container p-0! gap-0! aspect-2/2.5 group/product shadow-sm md:shadow-md lg:shadow-lg",
+                "@container p-0! gap-0! group/product hover:shadow-sm",
                 isDefault && "relative min-w-60 sm:min-w-60 hover:cursor-pointer",
             )}
         >
@@ -40,52 +49,77 @@ export default function Product({ as, product }: ProductProps) {
                 className={cn(
                     "p-0 overflow-hidden",
                     !isDefault && "relative",
-                    isFeatured && "h-6/10",
-                    isPopular && "h-5/10",
-                    isDefault && "h-full", // fallback so `fill` image has a box
+                    isFeatured && "aspect-4/3",
+                    isPopular && "aspect-4/2.5",
                 )}
             >
                 <Image
-                    src={primaryImage?.src ?? "/image/jacket.jpg"}
-                    alt={primaryImage?.alt ?? name ?? "Product image"}
+                    src={colors[0]?.image?.src ?? "/image/jacket.jpg"}
+                    alt={colors[0]?.image?.alt ?? name ?? "Product image"}
                     fill
                     sizes="(max-width: 768px) 100vw, 340px"
                     className={cn(
-                        "object-cover scale-101 group-hover/product:scale-105 transition-all duration-300 ease-in-out",
+                        "object-cover scale-101 group-hover/product:scale-105 transition-transform duration-300 ease-in-out",
                         isDefault &&
                         "object-top group-hover/product:scale-110 group-active/product:scale-100 duration-500",
                     )}
                 />
 
                 {badge && (
-                    <Text
-                        tracking="wider"
-                        weight="semibold"
-                        value={badge}
-                        variant="outline"
-                        className={cn(
-                            "w-fit absolute z-10 p-0!",
-                            isDefault
-                                ? "inset-x-0 top-[10cqi] left-[10cqi]"
-                                : "inset-x-0 top-[5cqi] left-[5cqi]",
-                            "pb-[1.5cqh]! pt-[1.6cqh]! sm:py-[1.5cqh]! px-[6cqw]! sm:px-[8cqw]! border-[0.5cqi]",
-                            "text-[4cqw] sm:text-[3.5cqw]",
-                        )}
-                    />
+                    <Tag value={badge} top="top-[5cqi]" left="left-[5cqi]" />
+                )}
+
+                {(isFeatured && wholesaleTiers && isWholesale) && (
+                    <Tag value={`Wholesale tier - ${wholesaleTiers[0].discountPercentage}%`}
+                        top="top-[17cqi]" left="left-[5cqi]" primary />
                 )}
             </CardHeader>
 
             <CardContent
                 className={cn(
-                    "z-10 p-0",
+                    "z-10 p-[6cqi] flex flex-col gap-[1cqh]",
                     isDefault && "absolute bottom-0 text-white",
                 )}
             >
-                {isDefault && <DefaultContent tagline={tagline} />}
-
-                {isFeatured && <FeaturedContent product={product} />}
-                {isPopular && <PopularContent product={product} />}
+                <Content1 product={product} isFeatured={isFeatured} isPopular={isPopular} />
+                <Content2 product={product} isPopular={isPopular} />
+                <Content3 product={product} isFeatured={isFeatured} />
             </CardContent>
+
+            <CardFooter className="mx-[6cqi] bg-transparent p-0 py-[6cqi]">
+                {isFeatured &&
+                    <div className="flex justify-between w-full">
+                        <div>
+                            <Text
+                                value={retailDiscount !== 0 ? retailPrice.unitPrice : "Retail"}
+                                className={cn("text-[3.5cqi] opacity-50", retailDiscount !== 0 && "line-through")}
+                                weight={'medium'}
+                                font={'mono'}
+                                color={'gray'}
+                                tracking={'wider'}
+                                number
+                            />
+
+                            <Text
+                                value={retailPrice.discountPrice}
+                                className="text-[5cqi]"
+                                weight={'medium'}
+                                font={'mono'}
+                                tracking={'wider'}
+                                number
+                            />
+                        </div>
+
+                        <ButtonImpl
+                            text={"View"}
+                            variant={'outline'}
+                            className={"text-[4cqi] px-[6cqi]! h-[12cqi] rounded-[2cqi]"}
+                        />
+                    </div>
+                }
+
+
+            </CardFooter>
 
             {isDefault && (
                 <FadeOverlay
@@ -99,23 +133,183 @@ export default function Product({ as, product }: ProductProps) {
     );
 }
 
-function DefaultContent({ tagline }: { tagline: string }) {
+type ContentType = {
+    product: ProductType;
+    isFeatured?: boolean;
+    isPopular?: boolean;
+}
+
+function Tag({
+    top,
+    bottom,
+    right,
+    left,
+    primary = false,
+    value,
+}: Omit<ContentType, "product"> & {
+    value: string,
+    top?: string,
+    bottom?: string,
+    left?: string,
+    right?: string,
+    primary?: boolean,
+}) {
     return (
-        <div className="space-y-[6cqw] overflow-hidden px-[10cqw] pb-[10cqw]">
+        <Text
+            tracking="wider"
+            weight="semibold"
+            value={value}
+            tag="outline"
+            casing={'upper'}
+            className={cn(
+                "w-fit absolute z-10 p-0! rounded-[2cqi]",
+                "inset-x-0", top, bottom, left, right,
+                "h-[2cqh] sm:h-[3cqh] px-[4cqw]! sm:px-[6cqw]!",
+                "backdrop-blur-sm text-[4cqw] sm:text-[3.5cqw]",
+                primary && cn(
+                    "bg-primary! text-primary-foreground",
+                ),
+            )}
+        />
+    )
+}
+
+function Content1({ product, isFeatured = false, isPopular = false }: ContentType) {
+
+    const { badge, colors, name, style, stock, rating, gender } = product;
+    const rate = calculateRating(rating)
+
+    return <>
+        {isPopular && <div className="flex items-end gap-[6cqw]">
+            <div className="flex items-center gap-[2cqw]">
+                <Star className="size-[5cqw] text-primary fill-primary" />
+
+                <Text
+                    value={rate.average}
+                    casing={'upper'}
+                    color={'gray'}
+                    weight={'extrabold'}
+                    tracking={'tighter'}
+                    font={'mono'}
+                    number
+                    className="text-[3.5cqw]"
+                />
+
+                <Text
+                    value={`(${rate.total})`}
+                    casing={'upper'}
+                    color={'gray'}
+                    tracking={'tighter'}
+                    weight={'light'}
+                    font={'mono'}
+                    className="text-[3.5cqw] "
+                />
+            </div>
+
             <Text
-                tracking="wider"
-                value={tagline}
-                color="gray"
-                className="text-[5cqw]!"
+                value={gender}
+                casing={'capitalize'}
+                color={'gray'}
+                weight={'medium'}
+                tracking={'widest'}
+                font={'mono'}
+                className="text-[3.5cqw]"
+            />
+        </div>}
+
+        {isFeatured && <div className="flex justify-between items-end">
+            <Text
+                value={style?.name}
+                casing={'upper'}
+                color={'gray'}
+                weight={'light'}
+                tracking={'wider'}
+                className="text-[3.2cqw]"
+            />
+
+            <Text
+                value={`${stock} in stock`}
+                casing={'upper'}
+                color={'gray'}
+                weight={'medium'}
+                tracking={'widest'}
+                font={'mono'}
+                className="text-[3cqw]"
+            />
+        </div>}
+    </>;
+}
+
+function Content2({ product, isPopular = false }: ContentType) {
+
+    const { name, description } = product;
+
+    return (
+        <div className="flex flex-col items-start gap-[2cqi]">
+            <Text
+                value={name}
+                render={{ as: 'tag', tag: "h3" }}
+                font={'sans'}
+                casing={'capitalize'}
+                tracking={'wide'}
+                weight={'semibold'}
+                wrap={false}
+                className="text-[5cqi]!"
+            />
+
+            <Text
+                value={description}
+                color={'gray'}
+                tracking={'wide'}
+                weight={'light'}
+                font={'mono'}
+                wrap={isPopular}
+                className="text-[4cqw] line-clamp-3 leading-[7cqi]"
             />
         </div>
-    );
+    )
 }
 
-function FeaturedContent({ product }: { product: ProductType }) {
-    return null;
-}
+function Content3({ product, isFeatured = false }: ContentType) {
 
-function PopularContent({ product }: { product: ProductType }) {
-    return null;
+    const { rating, gender } = product;
+    const rate = calculateRating(rating)
+
+    return <>
+        {isFeatured && <div className="flex items-end gap-[6cqw]">
+            <div className="flex items-center gap-[2cqw]">
+                <Star className="size-[5cqw] text-primary fill-primary" />
+
+                <Text
+                    value={rate.average}
+                    casing={'upper'}
+                    color={'gray'}
+                    weight={'extrabold'}
+                    tracking={'tighter'}
+                    font={'mono'}
+                    className="text-[3.5cqw] tabular-nums"
+                />
+
+                <Text
+                    value={`(${rate.total})`}
+                    casing={'upper'}
+                    color={'gray'}
+                    tracking={'tighter'}
+                    weight={'light'}
+                    font={'mono'}
+                    className="text-[3.5cqw] "
+                />
+            </div>
+
+            <Text
+                value={gender}
+                casing={'capitalize'}
+                color={'gray'}
+                weight={'medium'}
+                tracking={'widest'}
+                font={'mono'}
+                className="text-[3.5cqw]"
+            />
+        </div>}
+    </>;
 }
