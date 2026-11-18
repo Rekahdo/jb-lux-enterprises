@@ -33,7 +33,7 @@ export function Products({
     }, [products]);
 
     const layoutStyle = cn(
-        "grid gap-2 sm:gap-4 md:gap-6",
+        "grid gap-4 md:gap-6",
         "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4",
     );
 

@@ -83,7 +83,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
             >
                 <ContentTop product={product} isFeatured={isFeatured} isPopular={isPopular} />
                 <TitleDescription product={product} isPopular={isPopular} />
-                <Content3 product={product} isFeatured={isFeatured} />
+                {isFeatured && <ContentRating product={product} />}
             </CardContent>
 
             <CardFooter className="mx-[6cqi] bg-transparent p-0 py-[6cqi]">
@@ -92,7 +92,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                         <div>
                             <Text
                                 value={retailDiscount !== 0 ? retailPrice.unitPrice : "Retail"}
-                                className={cn("text-[5cqi] sm:text-[3.5cqi] opacity-50", 
+                                className={cn("text-[5cqi] sm:text-[3.5cqi] opacity-50",
                                     retailDiscount !== 0 && "line-through"
                                 )}
                                 weight={'medium'}
@@ -105,7 +105,7 @@ export default function Product({ as, product, isWholesale }: ProductProps) {
                             <Text
                                 value={retailPrice.discountPrice}
                                 className="text-[7cqi] sm:text-[5cqi]"
-                                weight={'medium'}
+                                weight={'semibold'}
                                 font={'mono'}
                                 tracking={'wider'}
                                 number
@@ -169,7 +169,7 @@ function Tag({
                 "w-fit absolute z-10 p-0! rounded-[2cqi]",
                 "inset-x-0", top, bottom, left, right,
                 "h-[2cqh] sm:h-[3cqh] px-[4cqw]! sm:px-[6cqw]!",
-                "backdrop-blur-sm text-[4cqw] sm:text-[3.5cqw]",
+                "text-[4cqw] sm:text-[3.5cqw]",
                 primary && cn(
                     "bg-primary! text-primary-foreground",
                 ),
@@ -178,48 +178,57 @@ function Tag({
     )
 }
 
-function ContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
+function ContentRating({ product }: ContentType) {
 
-    const { style, stock, rating, gender } = product;
+    const { rating, gender } = product;
     const rate = calculateRating(rating)
 
-    return <>
-        {isPopular &&
-            <div className="flex items-end gap-[6cqw]">
-                <div className="flex items-start gap-[2cqw]">
-                    <Star className="size-[6cqw] sm:size-[5cqw] text-primary fill-primary" />
-
-                    <Text
-                        value={rate.average}
-                        casing={'upper'}
-                        color={'gray'}
-                        weight={'extrabold'}
-                        tracking={'tighter'}
-                        font={'mono'}
-                        className="text-[5cqw] sm:text-[3.5cqw]"
-                    />
-
-                    <Text
-                        value={`(${rate.total})`}
-                        casing={'upper'}
-                        color={'gray'}
-                        tracking={'tighter'}
-                        weight={'light'}
-                        font={'mono'}
-                        className="text-[5cqw] sm:text-[3.5cqw]"
-                    />
-                </div>
+    return (
+        <div className="flex items-end gap-[6cqw]">
+            <div className="flex items-start gap-[2cqw]">
+                <Star className="size-[6cqw] sm:size-[5cqw] text-primary fill-primary" />
 
                 <Text
-                    value={gender}
-                    casing={'capitalize'}
+                    value={rate.average}
+                    casing={'upper'}
                     color={'gray'}
-                    weight={'medium'}
-                    tracking={'widest'}
+                    weight={'extrabold'}
+                    tracking={'tighter'}
+                    font={'mono'}
+                    className="text-[5cqw] sm:text-[3.5cqw]"
+                />
+
+                <Text
+                    value={`(${rate.total})`}
+                    casing={'upper'}
+                    color={'gray'}
+                    tracking={'tighter'}
+                    weight={'light'}
                     font={'mono'}
                     className="text-[5cqw] sm:text-[3.5cqw]"
                 />
             </div>
+
+            <Text
+                value={gender}
+                casing={'capitalize'}
+                color={'gray'}
+                weight={'medium'}
+                tracking={'widest'}
+                font={'mono'}
+                className="text-[5cqw] sm:text-[3.5cqw]"
+            />
+        </div>
+    )
+}
+
+function ContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
+
+    const { style, stock } = product;
+
+    return <>
+        {isPopular &&
+            <ContentRating product={product} />
         }
 
         {isFeatured && <div className="flex justify-between items-end">
@@ -227,8 +236,8 @@ function ContentTop({ product, isFeatured = false, isPopular = false }: ContentT
                 value={style?.name}
                 casing={'upper'}
                 color={'gray'}
-                weight={'light'}
-                tracking={'wider'}
+                weight={'semibold'}
+                tracking={'widest'}
                 className="text-[4.5cqw] sm:text-[3.2cqw]"
             />
 
@@ -236,10 +245,10 @@ function ContentTop({ product, isFeatured = false, isPopular = false }: ContentT
                 value={`${stock} in stock`}
                 casing={'upper'}
                 color={'gray'}
-                weight={'medium'}
+                weight={'semibold'}
                 tracking={'widest'}
                 font={'mono'}
-                className="text-[4cqw] sm:text-[3cqw]"
+                className="text-[4.5cqw] sm:text-[3.2cqw]"
             />
         </div>}
     </>;
@@ -273,50 +282,4 @@ function TitleDescription({ product, isPopular = false }: ContentType) {
             />
         </div>
     )
-}
-
-function Content3({ product, isFeatured = false }: ContentType) {
-
-    const { rating, gender } = product;
-    const rate = calculateRating(rating)
-
-    return <>
-        {isFeatured &&
-            <div className="flex items-end gap-[6cqw]">
-                <div className="flex items-start gap-[2cqw]">
-                    <Star className="size-[6cqw] sm:size-[5cqw] text-primary fill-primary" />
-
-                    <Text
-                        value={rate.average}
-                        casing={'upper'}
-                        color={'gray'}
-                        weight={'extrabold'}
-                        tracking={'tighter'}
-                        font={'mono'}
-                        className="text-[5cqw] sm:text-[3.5cqw]"
-                    />
-
-                    <Text
-                        value={`(${rate.total})`}
-                        casing={'upper'}
-                        color={'gray'}
-                        tracking={'tighter'}
-                        weight={'light'}
-                        font={'mono'}
-                        className="text-[5cqw] sm:text-[3.5cqw]"
-                    />
-                </div>
-
-                <Text
-                    value={gender}
-                    casing={'capitalize'}
-                    color={'gray'}
-                    weight={'medium'}
-                    tracking={'widest'}
-                    font={'mono'}
-                    className="text-[5cqw] sm:text-[3.5cqw]"
-                />
-            </div>
-        }
-    </>;
 }

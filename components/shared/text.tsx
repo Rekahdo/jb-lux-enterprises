@@ -81,9 +81,9 @@ export const textVariants = cva("", {
   variants: {
     tag: {
       outline: cn("leading-0! flex items-center",
-        "rounded-md bg-foreground text-primary border sm:border-2 border-background/20",
-        "dark:border-foreground/20 dark:bg-background transition-all",
-        "supports-backdrop-filter:bg-foreground/10 dark:supports-backdrop-filter:bg-background/10"
+        "rounded-md bg-foreground/60 text-primary border sm:border-2 border-background/20",
+        "dark:border-foreground/20 dark:bg-background/60",
+        // "supports-backdrop-filter:bg-foreground/10 dark:supports-backdrop-filter:bg-background/10"
       )
     },
     size: {
