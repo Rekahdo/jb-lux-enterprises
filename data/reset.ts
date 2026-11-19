@@ -15,19 +15,8 @@ export type HrefFile = {
 export type ColorImage = {
   name: string;
   hex?: string;
-  // image: SrcImageType;
 };
 
 export type IdProp = {
   id: string;
-};
-
-export type AddressProps = {
-  addressId: string;
-  address: AddressType | undefined;
-};
-
-export type PhoneProps = {
-  phoneId: string;
-  phone: PhoneType | undefined;
 };

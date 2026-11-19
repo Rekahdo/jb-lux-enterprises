@@ -10,46 +10,58 @@ import { ShoppingCartPlus, Star } from "lucide-react";
 import { calculateRating } from "@/lib/rating";
 import { convertCurrency } from "@/app/action/currency";
 import { convertCent } from "@/lib/current";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { useEffect, useState } from "react";
 import { ButtonImpl } from "../shared/button-impl";
 
 export interface ProductProps {
-    as: "default" | "popular" | "featured";
+    as?: "popular" | "product";
     product: ProductType;
     isWholesale?: boolean;
+    view?: boolean;
 }
 
-export default function Product({ as, product, isWholesale = true }: ProductProps) {
+export default function Product({ as = "product", product, isWholesale = false, view = false }: ProductProps) {
     if (!product) return null;
 
     const router = useRouter();
 
-    const isDefault = as === "default";
     const isPopular = as === "popular";
-    const isFeatured = as === "featured";
+    const isProduct = as === "product";
 
     const { badge, colors, name, wholesaleTiers, unitPrice, retailDiscount, isSale } = product;
 
     const retailPrice = convertCent({ amountInCents: unitPrice, currency: "NGN", discount: retailDiscount });
     const wholesalePrice = wholesaleTiers ? convertCent({ amountInCents: unitPrice, currency: "NGN", discount: wholesaleTiers[0].discountPercentage }) : undefined;
 
+    const [pricing, setPricing] = useState(retailPrice);
+    const [pricingLabel, setPricingLabel] = useState<"Retail" | "Wholesale">("Retail");
+
+    useEffect(() => {
+        if (wholesalePrice) {
+            setPricing(isWholesale ? wholesalePrice : retailPrice)
+            setPricingLabel(isWholesale ? "Wholesale" : "Retail")
+        }
+        else {
+            setPricing(retailPrice)
+            setPricingLabel("Retail")
+        }
+    }, [isWholesale])
+
     return (
         <Card
             data-slot="product"
             onClick={
-                isDefault ? () => router.push(STOREFRONT_ROUTE) : undefined
+                isProduct ? () => router.push(STOREFRONT_ROUTE) : undefined
             }
             className={cn(
                 "@container p-0! gap-0! group/product hover:shadow-2xl",
-                isDefault && "relative min-w-60 sm:min-w-60 hover:cursor-pointer",
             )}
         >
             <CardHeader
                 className={cn(
-                    "p-0 overflow-hidden",
-                    !isDefault && "relative",
-                    isFeatured && "aspect-4/3",
+                    "p-0 overflow-hidden relative",
+                    isProduct && "aspect-4/3",
                     isPopular && "aspect-4/2.5",
                 )}
             >
@@ -60,12 +72,10 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
                     sizes="(max-width: 768px) 100vw, 340px"
                     className={cn(
                         "object-cover scale-101 group-hover/product:scale-105 transition-transform duration-300 ease-in-out",
-                        isDefault &&
-                        "object-top group-hover/product:scale-110 group-active/product:scale-100 duration-500",
                     )}
                 />
 
-                {(isSale || badge || (isFeatured && wholesaleTiers && isWholesale)) && (
+                {(isSale || badge || (isProduct && wholesaleTiers && isWholesale)) && (
                     <div className="absolute top-[5cqi] left-[5cqi] flex flex-col gap-[2cqi]">
                         {(isPopular && isSale) && (
                             <ProductTag value={"sale"} tag={'destructive'} />
@@ -75,7 +85,7 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
                             <ProductTag value={badge} />
                         )}
 
-                        {(isFeatured && wholesaleTiers && isWholesale) && (
+                        {(isProduct && wholesaleTiers && isWholesale) && (
                             <ProductTag value={`Wholesale tier - ${wholesalePrice?.discount}%`} tag={'primary'} />
                         )}
                     </div>
@@ -83,15 +93,12 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
 
             </CardHeader>
 
-            <CardContent
-                className={cn(
-                    "z-10 p-[6cqi] flex flex-col gap-[1cqh] sm:gap-[1.5cqh]",
-                    isDefault && "absolute bottom-0 text-white",
-                )}
-            >
-                <ProductContentTop product={product} isFeatured={isFeatured} isPopular={isPopular} />
+            <CardContent className={cn(
+                "z-10 p-[6cqi] flex flex-col gap-[1cqh] sm:gap-[1.5cqh]",
+            )}>
+                <ProductContentTop product={product} isProduct={isProduct} isPopular={isPopular} />
                 <ProductTitleDescription product={product} isPopular={isPopular} />
-                {isFeatured && <ProductContentRating product={product} />}
+                {isProduct && <ProductContentRating product={product} />}
             </CardContent>
 
             <CardFooter className="mx-[6cqi] bg-transparent p-0 py-[6cqi]">
@@ -99,9 +106,10 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
                     <div>
                         <div className="flex gap-[4cqw]">
                             <Text
-                                value={retailDiscount !== 0 ? retailPrice.unitPrice : "Retail"}
+                                value={pricing.discount !== 0 ? pricing.unitPrice : pricingLabel}
                                 className={cn("text-[5cqi] sm:text-[3.5cqi] opacity-50",
-                                    retailDiscount !== 0 && "line-through"
+                                    pricing.discount !== 0 && "line-through",
+                                    "py-[0.2em]"
                                 )}
                                 weight={'medium'}
                                 font={'mono'}
@@ -110,25 +118,27 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
                                 number
                             />
 
-                            {retailDiscount !== 0 && (
+                            {pricing.discount !== 0 && (
                                 <Text
-                                    value={`${retailPrice.discount}%-off`}
+                                    value={`-${pricing.discount}%`}
                                     className={cn(
-                                        "text-[5cqi] sm:text-[3.5cqi] opacity-50",
+                                        "text-[4cqi] sm:text-[3cqi]",
+                                        "bg-muted text-muted-foreground flex items-center px-[0.5em] rounded-[0.5em]"
                                     )}
                                     weight={'medium'}
                                     font={'mono'}
-                                    color={'gray'}
                                     tracking={'wider'}
                                     number
                                 />
                             )}
-
                         </div>
 
                         <Text
-                            value={retailPrice.discountPrice}
-                            className="text-[7cqi] sm:text-[5cqi]"
+                            value={pricing.discountPrice}
+                            className={cn(
+                                "text-[7cqi] sm:text-[5cqi]",
+                                isWholesale && "text-primary"
+                            )}
                             weight={'semibold'}
                             font={'mono'}
                             tracking={'wider'}
@@ -148,7 +158,7 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
                         />
                     }
 
-                    {isFeatured &&
+                    {isProduct &&
                         <ButtonImpl
                             text={"View"}
                             variant={'outline'}
@@ -161,22 +171,13 @@ export default function Product({ as, product, isWholesale = true }: ProductProp
 
 
             </CardFooter>
-
-            {isDefault && (
-                <FadeOverlay
-                    height="h-full"
-                    from="from-black"
-                    via="via-black/50"
-                    className=""
-                />
-            )}
         </Card>
     );
 }
 
 type ContentType = {
     product: ProductType;
-    isFeatured?: boolean;
+    isProduct?: boolean;
     isPopular?: boolean;
 }
 
@@ -242,7 +243,7 @@ function ProductContentRating({ product }: ContentType) {
     )
 }
 
-function ProductContentTop({ product, isFeatured = false, isPopular = false }: ContentType) {
+function ProductContentTop({ product, isProduct = false, isPopular = false }: ContentType) {
 
     const { style, stock } = product;
 
@@ -251,7 +252,7 @@ function ProductContentTop({ product, isFeatured = false, isPopular = false }: C
             <ProductContentRating product={product} />
         }
 
-        {isFeatured && <div className="flex justify-between items-end">
+        {isProduct && <div className="flex justify-between items-end">
             <Text
                 value={style?.name}
                 casing={'upper'}

@@ -1,9 +1,8 @@
 import { storeSettingsValidator } from "@/convex/schema";
 import { FLAGSHIP_ROUTE, ORDERS_ROUTE, STOREFRONT_ROUTE } from "@/lib/routes";
 import { Infer } from "convex/values";
-import { findAddressById } from "./address";
-import { findPhoneById } from "./phone";
-import { AddressProps, PhoneProps } from "./reset";
+import { AddressProps, findAddressById } from "./address";
+import { findPhoneById, PhoneProps } from "./phone";
 
 type ValidatorType = Infer<typeof storeSettingsValidator>;
 

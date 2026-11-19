@@ -251,6 +251,20 @@ export const statusTable = {
 
 export const statusValidator = v.object(statusTable);
 
+export const selectedProductValidator = v.object({
+  productId: v.id("products"),
+  discountPercentage: v.number(),
+  sizeId: v.id("sizes"),
+  colorId: v.id("colors"),
+  quantity: v.number(),
+});
+
+export const cartTable = {
+  userId: v.string(),
+  item: selectedProductValidator,
+};
+export const cartValidator = v.object(cartTable);
+
 export const ordersTable = {
   userId: v.string(),
   firstName: v.string(),
@@ -259,16 +273,7 @@ export const ordersTable = {
   phoneId: v.id("phones"),
   addressId: v.id("addresses"),
   bankReceipt: fileValidator,
-  items: v.array(
-    v.object({
-      productId: v.id("products"),
-      discountPercentage: v.number(),
-      size: v.id("sizes"),
-      color: v.id("colors"),
-      quantity: v.number(),
-      priceAtPurchase: v.number(),
-    }),
-  ),
+  items: v.array(selectedProductValidator),
   totalAmount: v.number(),
   notes: v.optional(v.string()),
   statusId: v.id("stats"),
@@ -346,6 +351,7 @@ export default defineSchema({
   visitStore: defineTable(visitStoreTable),
 
   sizes: defineTable(sizesTable),
+
   colors: defineTable(colorTable),
 
   categories: defineTable(categoryTable).index("by_slug", ["slug"]),
@@ -371,6 +377,8 @@ export default defineSchema({
     .index("by_fitId", ["fitId"]),
 
   stats: defineTable(statusTable).index("by_slug", ["slug"]),
+
+  carts: defineTable(cartTable).index("by_userId", ["userId"]),
 
   orders: defineTable(ordersTable)
     .index("by_userId", ["userId"])

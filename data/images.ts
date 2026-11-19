@@ -5,10 +5,15 @@ import { IdProp } from "./reset";
 type ValidatorType = Infer<typeof imageValidator>;
 
 export type ImagesType = Omit<ValidatorType, "storageId"> &
-  IdProp & {
-    storageId: string;
-    src: string;
-  };
+IdProp & {
+  storageId: string;
+  src: string;
+};
+
+export type ImagesProps = {
+  imageId: string;
+  image: ImagesType;
+};
 
 export const imageData: Promise<ImagesType[]> = Promise.resolve([
   // ---------- prod_001 — Luxury Senator Suit ----------

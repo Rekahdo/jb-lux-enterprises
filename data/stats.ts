@@ -6,6 +6,11 @@ type ValidatorType = Infer<typeof statusValidator>;
 
 export type StatusType = ValidatorType & IdProp;
 
+export type StatusProps = {
+  statusId: string;
+  status: StatusType | undefined;
+};
+
 export const statusData: Promise<StatusType[]> = Promise.resolve([
   {
     id: "stat-pending",
@@ -62,4 +67,10 @@ export async function findStatusById(
   id: string,
 ): Promise<StatusType | undefined> {
   return (await statusData).find((each) => each.id === id);
+}
+
+export async function findStatusBySlug(
+  slug: ValidatorType["slug"],
+): Promise<StatusType | undefined> {
+  return (await statusData).find((each) => each.slug === slug);
 }

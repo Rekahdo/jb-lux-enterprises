@@ -1,7 +1,9 @@
 import { visitStoreValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { storeSettingsData } from "./store-settings";
-import { AddressProps, PhoneProps, SrcImageType } from "./reset";
+import { SrcImageType } from "./reset";
+import { AddressProps } from "./address";
+import { PhoneProps } from "./phone";
 
 type ValidatorType = Infer<typeof visitStoreValidator>;
 

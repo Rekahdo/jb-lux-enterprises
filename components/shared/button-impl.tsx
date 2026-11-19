@@ -44,7 +44,7 @@ export interface ButtonImplProps extends ButtonVariantProps, NativeButtonProps {
     text?: ReactNode;
     icon?: ReactNode;
     showIcon?: boolean;
-    side?: "left" | "right";
+    position?: "left" | "right";
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     className?: string;
     isPending?: boolean;
@@ -67,7 +67,7 @@ export function ButtonImpl({
     text,
     icon,
     showIcon = true,
-    side = "left",
+    position = "left",
     onClick,
     className,
     isPending,
@@ -136,14 +136,15 @@ export function ButtonImpl({
         <Tag
             {...tagProps}
             {...rest}
+            data-slot="button-impl"
             disabled={isDisabledOrPending || undefined}
-            className={cn("cursor-pointer capitalize",
+            className={cn("group/btnImpl cursor-pointer capitalize",
                 buttonVariants({ variant, size }),
                 buttonImplVariants({ height, width }),
                 className,
             )}
         >
-            {showIcon && side === "left" && <BtnIcon />}
+            {showIcon && position === "left" && <BtnIcon />}
 
             {text &&
                 <span data-sh={showTextAt} className={SHOW_TEXT_AT_STYLES}>
@@ -151,10 +152,10 @@ export function ButtonImpl({
                 </span>
             }
 
-            {showIcon && side === "right" && <BtnIcon />}
+            {showIcon && position === "right" && <BtnIcon />}
         </Tag>
     );
-} 
+}
 
 export interface ButtonImplGroupProps {
     className?: string;

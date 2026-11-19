@@ -1,9 +1,9 @@
 'use client'
 
-import { Authenticated, Unauthenticated } from "convex/react";
+import { Authenticated, Unauthenticated, useConvexAuth } from "convex/react";
 import { ButtonImpl, ButtonImplProps, ButtonVariantProps } from "./button-impl";
-import { ArrowRight, LogOut } from "lucide-react";
-import { useTransition } from "react";
+import { ArrowRight, LogOut, ShoppingCart } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { DialogLoginForm, DialogSignUpForm } from "./auth-forms";
@@ -13,8 +13,10 @@ import { buttonImplVariants } from "../shared/button-impl";
 import { VariantProps } from "class-variance-authority";
 import { buttonVariants } from "../ui/button";
 import { cn } from "cn";
-import { PROFILE_ROUTE, STOREFRONT_ROUTE } from "@/lib/routes";
+import { CART_ROUTE, PROFILE_ROUTE, STOREFRONT_ROUTE } from "@/lib/routes";
 import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
+import Text from "./text";
+import { cartData, CartType } from "@/data/cart";
 
 const btnSize = "lg";
 const iconSize = `icon-${btnSize}`;
@@ -120,11 +122,42 @@ export function ProfileBtn({ className, ...props }: ButtonsProps) {
     );
 }
 
+export function CartBtn({ className, ...props }: ButtonsProps) {
+    const [cart, setCart] = useState<CartType[]>([]);
+
+    return (
+        <div className="relative">
+            <ButtonImpl
+                text={"Cart"}
+                icon={<ShoppingCart />}
+                size={btnSize}
+                variant={'outline'}
+                className={cn(className)}
+                render={{
+                    as: "page",
+                    href: CART_ROUTE
+                }}
+                {...props}
+            />
+
+            <Text
+                value={String(cart?.length) ?? "0"}
+                font={'mono'}
+                number
+                className={cn("flex items-center justify-center",
+                    "absolute -top-2 -right-1 size-5 rounded-full",
+                    "bg-background"
+                )}
+            />
+        </div>
+    );
+}
+
 
 export function ExploreCollectionBtn({ className, ...props }: ButtonsProps) {
     return (
         <ButtonImpl
-            side="right"
+            position="right"
             text="Explore Collections"
             icon={<ArrowRight />}
             height={'lg'}
@@ -141,7 +174,7 @@ export function ExploreCollectionBtn({ className, ...props }: ButtonsProps) {
 export function WholesaleBtn({ className, ...props }: ButtonsProps) {
     return (
         <ButtonImpl
-            side="right"
+            position="right"
             text="Wholesare"
             variant={'outline'}
             height={'lg'}

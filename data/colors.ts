@@ -6,6 +6,11 @@ type ValidatorType = Infer<typeof colorValidator>;
 
 export type ColorType = ValidatorType & IdProp;
 
+export type ColorProps = {
+  colorId: string;
+  color: ColorType | undefined;
+};
+
 export const colorData: Promise<ColorType[]> = Promise.resolve([
   // ---------- Blacks & Neautrals ----------
   {

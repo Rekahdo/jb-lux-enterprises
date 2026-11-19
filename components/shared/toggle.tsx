@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn, getRootDocument, themeIsDark, windowTheme } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { Moon, Sun } from "lucide-react"
@@ -11,7 +11,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import { ButtonImpl, ButtonImplProps } from "./button-impl";
+import { VariantProps } from "class-variance-authority";
 
 export function AppToggle({ className }: { className?: string }) {
 
@@ -110,60 +112,89 @@ export function ThemeToggle({ className }: { className?: string }) {
     )
 }
 
-type MultiToggleType = {
-    text: string;
-    icon?: ReactNode;
+type SingleToggleProps = Omit<ButtonImplProps, "variant" | "onClick"> & {
+    onClick?: () => void;
 }
 
-type MultiToggleProps = {
+type MultiToggleProps = ButtonImplProps & {
     rootToggle?: boolean;
-    selectIndex?: number;
-    toggles: MultiToggleType[]
-    className?: string;
-    showTextAt?: "all" | "sm" | "md" | "lg";
-    onChange?: (index: number) => void;
+    toggles: SingleToggleProps[]
+    selected?: VariantProps<typeof buttonVariants>["variant"];
+    unselected?: VariantProps<typeof buttonVariants>["variant"];
+    initialIndex?: number;
+    rootClassName?: string;
+    onChangeAction?: (index: number) => void;
 }
 
-export function MultiToggle({ 
-    selectIndex=0, 
-    toggles, onChange, 
-    showTextAt, 
-    className,
-    rootToggle=false,
+export function MultiToggle({
+    rootToggle = false,
+    rootClassName,
+    initialIndex = 0,
+    toggles,
+    selected = "default",
+    unselected = "ghost",
+    onChangeAction,
+    ...btnProps
 }: MultiToggleProps) {
-    
-    const [selected, setSelected] = useState<number>(selectIndex)
+    const [selectIndex, setSelectIndex] = useState<number>(initialIndex);
 
     useEffect(() => {
-        onChange?.(selected);
-    }, [selected])
+        onChangeAction?.(selectIndex);
+    }, [selectIndex]);
 
-    function toggle(id?: number) {
-        rootToggle 
-        ? setSelected(s => s+1 < toggles.length ? s+1 : 0)
-        : setSelected(id!);
+    function handleToggle(index: number) {
+        let nextIndex: number;
+
+        if (rootToggle) {
+            nextIndex = index + 1 < toggles.length ? index + 1 : 0;
+        } else {
+            nextIndex = index;
+        }
+
+        setSelectIndex(nextIndex);
+
+        const next = toggles[nextIndex];
+        next?.onClick?.();
     }
 
     return (
-        <div onClick={rootToggle ? () => toggle() : undefined}
-            className={cn(
-                "inline-flex items-center gap-1 rounded-full text-foreground",
-                "border border-border/60 bg-background/80 dark:bg-background/40 p-1 backdrop-blur-md",
-                className
-            )}>
-
-            {toggles.map((btn, index) =>
-                <Button
-                    key={`${btn.text}-${index}`}
-                    aria-selected={index === selected}
-                    variant={index === selected ? "default" : "ghost"}
-                    className={cn("rounded-full")}
-                    onClick={rootToggle ? undefined : () => toggle(index)}
-                >
-                    {btn.icon} <span className="hidden sm:inline">{btn.text}</span>
-                </Button>)
+        <div
+            onClick={
+                rootToggle
+                    ? () => handleToggle(selectIndex)
+                    : undefined
             }
+            className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg",
+                "border border-border/60 bg-secondary text-secondary-foreground p-1.5",
+                rootClassName,
+            )}
+        >
+            {toggles.map((toggle, index) => {
+                const { onClick, ...rest } = toggle;
 
+                return (
+                    <div
+                        key={`${toggle.text}-${index}`}
+                        onClick={
+                            rootToggle
+                                ? undefined
+                                : () => {
+                                    setSelectIndex(index);
+                                    onClick?.();
+                                }
+                        }>
+
+                        <ButtonImpl
+                            aria-selected={index === selectIndex}
+                            variant={index === selectIndex ? selected : unselected}
+                            className={cn(index === selectIndex && "shadow-sm")}
+                            {...btnProps}
+                            {...rest}
+                        />
+                    </div>
+                );
+            })}
         </div>
-    )
+    );
 }

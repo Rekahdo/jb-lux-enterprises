@@ -9,6 +9,11 @@ export type CategoryType = Omit<ValidatorType, "imageId"> &
     imageId?: SrcImageType;
   };
 
+export type CategoryProps = {
+  categoryId: string;
+  category: CategoryType | undefined;
+};
+
 export const categoriesData: Promise<CategoryType[]> = Promise.resolve([
   {
     id: "cat-01",

@@ -1,19 +1,15 @@
 import { ordersValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { findStatusById, StatusType } from "./stats";
-import { IdProp, HrefFile, PhoneProps, AddressProps } from "./reset";
-import { findAddressById } from "./address";
-import { findPhoneById } from "./phone";
+import { findStatusById, StatusProps, StatusType } from "./stats";
+import { IdProp, HrefFile } from "./reset";
+import { AddressProps, findAddressById } from "./address";
+import { findPhoneById, PhoneProps } from "./phone";
+import { ItemType } from "./cart";
+import { findColorById } from "./colors";
+import { findSizeById } from "./sizes";
+import { findProductById } from "./products";
 
 type ValidatorType = Infer<typeof ordersValidator>;
-
-type ItemsType = ValidatorType["items"][number];
-
-export type OrderItemType = Omit<ItemsType, "productId" | "size" | "color"> & {
-  productId: string;
-  size: string;
-  color: string;
-};
 
 export type OrderType = Omit<
   ValidatorType,
@@ -21,12 +17,16 @@ export type OrderType = Omit<
 > &
   IdProp &
   AddressProps &
-  PhoneProps & {
+  PhoneProps &
+  StatusProps & {
     bankReceipt: HrefFile;
-    items: OrderItemType[];
-    statusId: string;
-    status: StatusType | undefined;
+    items: ItemType[];
   };
+
+export type OrderProps = {
+  orderId: string;
+  order: OrderType;
+};
 
 export const ordersData: Promise<OrderType[]> = (async () => {
   return [
@@ -49,9 +49,12 @@ export const ordersData: Promise<OrderType[]> = (async () => {
       items: [
         {
           productId: "prod_001",
+          product: await findProductById("prod_001"),
           discountPercentage: 18,
-          size: "sz-l",
-          color: "col-jet-black",
+          sizeId: "sz-l",
+          size: await findSizeById("sz-l"),
+          colorId: "col-jet-black",
+          color: await findColorById("col-jet-black"),
           quantity: 5,
           priceAtPurchase: 69700,
         },

@@ -3,17 +3,12 @@ import { Infer } from "convex/values";
 import { IdProp } from "./reset";
 import { findSubCategoryById, SubCategoryType } from "./subcategories";
 import { findStyleById, StyleType } from "./styles";
-import { ColorType, findColorById } from "./colors";
-import { ImagesType, findImageById } from "./images";
+import { ColorProps, ColorType, findColorById } from "./colors";
+import { ImagesProps, findImageById } from "./images";
 
 type ValidatorType = Infer<typeof productsValidator>;
 
-export type ProductColorType = {
-  colorId: string;
-  color: ColorType;
-  imageId: string;
-  image: ImagesType;
-};
+export type ProductColorType = ColorProps & ImagesProps;
 
 export type ProductType = Omit<
   ValidatorType,
@@ -21,12 +16,15 @@ export type ProductType = Omit<
 > &
   IdProp & {
     colors: ProductColorType[];
-    subCategoryId: string;
-    subCategory: SubCategoryType | undefined;
     styleId: string;
     style: StyleType | undefined;
     sizes: string[];
   };
+  
+export type ProductProps = {
+  productId: string;
+  product: ProductType | undefined;
+};
 
 export const productsData: Promise<ProductType[]> = Promise.resolve([
   // ---------- Clothing / Apparel ----------

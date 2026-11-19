@@ -1,15 +1,18 @@
 import { sizesValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { IdProp } from "./reset";
-import { CategoryType, findCategoryById } from "./categories";
+import { CategoryProps, findCategoryById } from "./categories";
 
 type ValidatorType = Infer<typeof sizesValidator>;
 
 export type SizeType = Omit<ValidatorType, "categoryId"> &
-  IdProp & {
-    categoryId: string;
-    category: CategoryType | undefined;
-  };
+  IdProp &
+  CategoryProps;
+
+export type SizeProps = {
+  sizeId: string;
+  size: SizeType | undefined;
+};
 
 export const sizesData: Promise<SizeType[]> = Promise.resolve([
   // ---------- Clothing (cat-01) ----------

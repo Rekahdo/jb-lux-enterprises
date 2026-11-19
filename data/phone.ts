@@ -2,9 +2,15 @@ import { phoneValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
 import { IdProp } from "./reset";
 
+
 type ValidatorType = Infer<typeof phoneValidator>;
 
 export type PhoneType = ValidatorType & IdProp;
+
+export type PhoneProps = {
+  phoneId: string;
+  phone: PhoneType | undefined;
+};
 
 export const phoneData: Promise<PhoneType[]> = Promise.resolve([
   {

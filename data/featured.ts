@@ -1,13 +1,10 @@
 import { featuredValidator } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { findProductById, ProductType } from "./products";
+import { findProductById, ProductProps } from "./products";
 
 type ValidatorType = Infer<typeof featuredValidator>;
 
-export type FeaturedType = Omit<ValidatorType, "productId"> & {
-  productId: string;
-  product: ProductType | undefined;
-};
+export type FeaturedType = Omit<ValidatorType, "productId"> & ProductProps;
 
 const featuredProductIds = [
   "prod_001",

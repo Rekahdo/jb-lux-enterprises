@@ -41,7 +41,6 @@ export default async function ShowcaseSection(_props: ShowcaseProps) {
             />
 
             <Products
-                as="featured"
                 products={resolveProducts(featured).slice(0, 8)}
                 overline={sec.featured.overline}
                 title={sec.featured.title}

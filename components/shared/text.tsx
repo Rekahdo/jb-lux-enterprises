@@ -82,10 +82,9 @@ export const textVariants = cva("", {
     variant: {
       tag: cn(
         "leading-0! flex items-center border-background/20",
-        "border sm:border-2 dark:border-foreground/20",
+        "border-[0.2em] dark:border-foreground/20",
         "w-fit z-10 p-0! text-[4.5cqw] sm:text-[3.5cqw]",
-        "h-[2cqh] sm:h-[3cqh] px-[2cqw]! sm:px-[4cqw]!",
-        "rounded-[2cqi]"
+        "h-[2.5em] px-[1em]! rounded-[0.5em]",
       ),
     },
     tag: {
@@ -253,6 +252,7 @@ export type TagType = { as: "tag"; tag: ElementType };
 export type RenderType = PageType | ScrollType | DownloadType | ExternalType | TagType;
 
 export interface TextProps extends VariantProps<typeof textVariants> {
+  'data-slot'?: string;
   value: ReactNode | undefined;
   id?: string;
   className?: string;
@@ -263,6 +263,7 @@ export interface TextProps extends VariantProps<typeof textVariants> {
 
 export default function Text({
   id,
+  'data-slot': dataSlot,
   value,
   className,
   render,
@@ -320,6 +321,7 @@ export default function Text({
   return (
     <Tag
       {...tagAttributes}
+      data-slot={dataSlot}
       id={id}
       className={cn(
         isLink && "hover:text-primary", number && "tabular-nums",

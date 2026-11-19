@@ -6,6 +6,11 @@ type ValidatorType = Infer<typeof styleValidator>;
 
 export type StyleType = Omit<ValidatorType, "isActive"> & IdProp &  {
   isActive?: boolean;
+}
+
+export type StyleProps = {
+  styleId: string;
+  style: StyleType;
 };
 
 export const stylesData: Promise<StyleType[]> = Promise.resolve([

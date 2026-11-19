@@ -1,5 +1,3 @@
-
-import Link from "next/link";
 import { footerData } from "@/data/footer";
 import { Container } from "../shared/container";
 import { AppLayout } from "../shared/layout";

@@ -86,9 +86,10 @@ export const navigationVariants = cva(
             },
             width: {
                 none: "px-0!",
-                '2xs': "px-2.5!",
-                xs: "px-3!",
-                sm: "px-4!",
+                '2xs': "px-1.5!",
+                xs: "px-2!",
+                sm: "px-3!",
+                default: "py-4!",
                 lg: "px-5!",
                 full: "w-full",
             },
@@ -99,6 +100,7 @@ export const navigationVariants = cva(
                 sm: "gap-x-2 lg:gap-x-3 gap-y-1",
                 md: "gap-x-3 lg:gap-x-4 gap-y-1",
                 lg: "gap-x-4 lg:gap-x-6 gap-y-1",
+                xl: "gap-x-5 lg:gap-x-7 gap-y-1",
             },
             orientation: {
                 vertical: "flex flex-col",
